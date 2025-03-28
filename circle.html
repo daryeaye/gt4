@@ -390,21 +390,25 @@
         let finalX = canvas.width / 2;
         let finalY = 50;
         ctx.fillText("The beans fit 3.14 of r-squares!", finalX + slideOffset, finalY);
-      } else if (currentPhase === 22) { // was 12: "Area of circle r = 3.14 of r-squares!"
-        ctx.font = "28px 'Comic Sans MS'";
-        let finalY = canvas.height - 50;
-        let segment1 = "Area of circle r";
-        let segment2 = " = 3.14 of r-squares!";
+      } else if (currentPhase === 22) {
+        ctx.font = "32px 'Comic Sans MS'";
+  // We'll use left alignment and compute the starting x so the whole message is centered.
         ctx.textAlign = "left";
-        let metrics1 = ctx.measureText(segment1);
-        let metrics2 = ctx.measureText(segment2);
-        let totalWidth = metrics1.width + metrics2.width;
+        let leftSegment = "area of circle = ";
+        let rightSegment = "3.14 of r-squares";
+        let leftWidth = ctx.measureText(leftSegment).width;
+        let rightWidth = ctx.measureText(rightSegment).width;
+        let totalWidth = leftWidth + rightWidth;
         let startX = (canvas.width - totalWidth) / 2 + slideOffset;
+  // Choose a y-position for the message (adjust as desired)
+        let yPosition = 50;
+  // Draw left segment in dark yellow:
         ctx.fillStyle = "darkgoldenrod";
-        ctx.fillText(segment1, startX, finalY);
+        ctx.fillText(leftSegment, startX, yPosition);
+  // Draw right segment in red right after the left segment:
         ctx.fillStyle = "red";
-        ctx.fillText(segment2, startX + metrics1.width, finalY);
-      }
+        ctx.fillText(rightSegment, startX + leftWidth, yPosition);
+}
     }
 
     // ----- Animation Functions for Drawing Phases -----
