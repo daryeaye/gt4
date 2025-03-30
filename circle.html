@@ -14,21 +14,30 @@
     /* Container with background image */
     #container {
       width: 800px;
+ height: 600px;
       margin: 20px auto;
       position: relative;
       background: url('https://daryeaye.github.io/xinlindywane/kitchentable.png') no-repeat center center;
-      background-size: contain;
+      background-size: 100% 100%;
       padding-bottom: 40px; /* space for copyright */
+    }
+    /* Hide the topic title */
+    #container h2 {
+      display: none;
     }
     canvas {
       border: 1px solid #ccc;
       background: transparent;
       margin-top: 20px;
     }
-    button {
+    /* Position the Play button inside the container near the bottom */
+    #playButton {
+      position: absolute;
+      bottom: 60px;
+      left: 50%;
+      transform: translateX(-50%);
       font-size: 16px;
       padding: 8px 16px;
-      margin-top: 20px;
     }
     /* Copyright message style */
     #copyright {
@@ -392,7 +401,7 @@
         ctx.fillText("The beans fit 3.14 of r-squares!", finalX + slideOffset, finalY);
       } else if (currentPhase === 22) {
         ctx.font = "32px 'Comic Sans MS'";
-  // We'll use left alignment and compute the starting x so the whole message is centered.
+        // We'll use left alignment and compute the starting x so the whole message is centered.
         ctx.textAlign = "left";
         let leftSegment = "area of circle = ";
         let rightSegment = "3.14 of r-squares";
@@ -400,15 +409,15 @@
         let rightWidth = ctx.measureText(rightSegment).width;
         let totalWidth = leftWidth + rightWidth;
         let startX = (canvas.width - totalWidth) / 2 + slideOffset;
-  // Choose a y-position for the message (adjust as desired)
+        // Choose a y-position for the message (adjust as desired)
         let yPosition = 50;
-  // Draw left segment in dark yellow:
+        // Draw left segment in dark yellow:
         ctx.fillStyle = "darkgoldenrod";
         ctx.fillText(leftSegment, startX, yPosition);
-  // Draw right segment in red right after the left segment:
+        // Draw right segment in red right after the left segment:
         ctx.fillStyle = "red";
         ctx.fillText(rightSegment, startX + leftWidth, yPosition);
-}
+      }
     }
 
     // ----- Animation Functions for Drawing Phases -----
