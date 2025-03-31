@@ -198,6 +198,8 @@
 
       // Final scene: New Phase 23 clears everything and shows final messages.
       if (currentPhase === 23) {
+        // Change play button text to "Replay"
+        document.getElementById("playButton").textContent = "Replay";
         // Big message on top.
         ctx.font = "112px 'Comic Sans MS'";
         ctx.textAlign = "center";
@@ -317,10 +319,9 @@
         ctx.textAlign = "center";
         ctx.fillStyle = "black";
         let finalX = square1.x + L / 2;
-        // Moved further down to avoid overlapping the red line.
         let finalY = square1.y + L + 30;
         ctx.fillText("Length of r", finalX + slideOffset, finalY);
-      } else if (currentPhase === 4) { // was 2.5: "A r-square" message
+      } else if (currentPhase === 4) { // was 2.5: "1 r-square" message
         ctx.font = "24px 'Comic Sans MS'";
         ctx.textAlign = "center";
         ctx.fillStyle = "black";
@@ -401,7 +402,6 @@
         ctx.fillText("The beans fit 3.14 of r-squares!", finalX + slideOffset, finalY);
       } else if (currentPhase === 22) {
         ctx.font = "32px 'Comic Sans MS'";
-        // We'll use left alignment and compute the starting x so the whole message is centered.
         ctx.textAlign = "left";
         let leftSegment = "Area of circle = ";
         let rightSegment = "3.14 of r-squares";
@@ -409,19 +409,15 @@
         let rightWidth = ctx.measureText(rightSegment).width;
         let totalWidth = leftWidth + rightWidth;
         let startX = (canvas.width - totalWidth) / 2 + slideOffset;
-        // Choose a y-position for the message (adjust as desired)
         let yPosition = 50;
-        // Draw left segment in dark yellow:
         ctx.fillStyle = "darkgoldenrod";
         ctx.fillText(leftSegment, startX, yPosition);
-        // Draw right segment in red right after the left segment:
         ctx.fillStyle = "red";
         ctx.fillText(rightSegment, startX + leftWidth, yPosition);
       }
     }
 
     // ----- Animation Functions for Drawing Phases -----
-    // Phase 1: Animate drawing the horizontal line.
     function animatePhase1(timestamp) {
       if (!phaseStartTime) phaseStartTime = timestamp;
       let progress = (timestamp - phaseStartTime) / phaseDurations.phase1;
@@ -575,8 +571,21 @@
       animateBeans(indices, targets, phaseDurations.phase10, () => { phaseStartTime = null; });
     }
 
-    // ----- Play Button Handler -----
+    // ----- Play/Replay Button Handler -----
     document.getElementById("playButton").addEventListener("click", () => {
+      // If the final scene is showing, reset the animation (i.e., replay)
+      if (currentPhase === 23) {
+        // Reset the phase index and all animation variables
+        currentPhaseIndex = -1;
+        currentPhase = 0;
+        beans = [];
+        rightLineProgress = verticalLineProgress = topLineProgress = square2Progress = square3Progress = leftLineProgress = circleArcProgress = 0;
+        // Reset button text back to "Play"
+        document.getElementById("playButton").textContent = "Play";
+        drawScene();
+        return;
+      }
+      // Normal progression through phases:
       currentPhaseIndex++;
       if (currentPhaseIndex >= phases.length) return;
       currentPhase = phases[currentPhaseIndex];
