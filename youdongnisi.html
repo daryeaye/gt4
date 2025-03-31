@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Geotopia Pt4 Chef Mario</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #app-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #header {
+      width: 960px;
+      background: #eee;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    #container {
+      position: relative;
+      width: 960px;
+      height: 540px;
+      border: 1px solid #ccc;
+      background: white;
+      overflow: hidden;
+    }
+    .page {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 960px;
+      height: 540px;
+      display: none;
+    }
+    .page.active {
+      display: block;
+    }
+    .box {
+      position: absolute;
+    }
+    input.typeable {
+      position: absolute;
+      font-family: "Comic Sans MS", sans-serif;
+      font-size: 22px;
+      border: 1px solid black;
+      background: rgba(173,216,230,0.5);
+      box-sizing: border-box;
+      text-align: center;
+    }
+    /* For page 3 text boxes, override font-size to 18px */
+    .page3-input {
+      font-size: 18px;
+    }
+    /* Page 13 draggable boxes font update */
+    #page13 .draggable {
+      position: relative;
+      font-family: "Caveat", cursive;
+      font-size: 60px;
+    }
+    #progressBar {
+      width: 100%;
+      background: #ccc;
+      height: 20px;
+      margin-top: 10px;
+    }
+    #progress {
+      width: 0%;
+      background: green;
+      height: 100%;
+    }
+    #header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    #translation-widget span {
+      vertical-align: middle;
+    }
+    #translation-widget a {
+      text-decoration: none;
+    }
+    #nav-buttons {
+      margin-top: 10px;
+    }
+    button {
+      font-family: "Caveat", cursive;
+      font-size: 20px;
+      background-color: lightblue;
+      border: none;
+      padding: 10px 20px;
+      margin: 0 5px;
+      cursor: pointer;
+    }
+
+    /* Background images for each page */
+    #page1 {
+      background: url("https://daryeaye.github.io/gt4/4-01.jpg") no-repeat center center;
+      background-size: cover;
+    }
+    #page2 {
+      background: url("https://daryeaye.github.io/gt4/4-02.jpg") no-repeat center center;
+      background-size: cover;
+    }
+    #page3 {
+      background: url("https://daryeaye.github.io/gt4/4-03.jpg") no-repeat center center;
+      background-size: cover;
+    }
+    #page4 {
+      background: url("https://daryeaye.github.io/gt4/4-04.jpg") no-repeat center center;
+      background-size: cover;
+    }
+    #page5 {
+      background: url("https://daryeaye.github.io/gt4/4-05.jpg") no-repeat center center;
+      background-size: cover;
+    }
+    #page6 {
+      background: url("https://daryeaye.github.io/gt4/4-06.jpg") no-repeat center center;
+      background-size: cover;
+    }
+    #page7 {
+      background: url("https://daryeaye.github.io/gt4/4-07.jpg") no-repeat center center;
+      background-size: cover;
+    }
+    #page8 {
+      background: url("https://daryeaye.github.io/gt4/4-08.jpg") no-repeat center center;
+      background-size: cover;
+    }
+    #page9 {
+      background: url("https://daryeaye.github.io/gt4/4-09.jpg") no-repeat center center;
+      background-size: cover;
+    }
+    #page10 {
+      background: url("https://daryeaye.github.io/gt4/4-10.jpg") no-repeat center center;
+      background-size: cover;
+    }
+    #page11 {
+      background: url("https://daryeaye.github.io/gt4/4-11.jpg") no-repeat center center;
+      background-size: cover;
+    }
+    #page12 {
+      background: url("https://daryeaye.github.io/gt4/4-12.jpg") no-repeat center center;
+      background-size: cover;
+    }
+    #page13 {
+      background: url("https://daryeaye.github.io/gt4/4-13.jpg") no-repeat center center;
+      background-size: cover;
+    }
+    #page14 {
+      background: url("https://daryeaye.github.io/gt4/4-14.jpg") no-repeat center center;
+      background-size: cover;
+    }
+    #page15 {
+      background: url("https://daryeaye.github.io/gt4/4-15.jpg") no-repeat center center;
+      background-size: cover;
+    }
+    #page16 {
+      background: url("https://daryeaye.github.io/gt4/4-16.jpg") no-repeat center center;
+      background-size: cover;
+    }
+    #page17 {
+      background: url("https://daryeaye.github.io/gt4/4-17.jpg") no-repeat center center;
+      background-size: cover;
+    }
+    #page18 {
+      background: url("https://daryeaye.github.io/gt4/4-18.jpg") no-repeat center center;
+      background-size: cover;
+    }
+    #page19 {
+      background: url("https://daryeaye.github.io/gt4/4-19.jpg") no-repeat center center;
+      background-size: cover;
+    }
+    #page20 {
+      background: url("https://daryeaye.github.io/gt4/4-20.jpg") no-repeat center center;
+      background-size: cover;
+    }
+    #page21 {
+      background: url("https://daryeaye.github.io/gt4/4-21.jpg") no-repeat center center;
+      background-size: cover;
+    }
+    #page22 {
+      background: url("https://daryeaye.github.io/gt4/4-22.jpg") no-repeat center center;
+      background-size: cover;
+    }
+    #page23 {
+      background: url("https://daryeaye.github.io/gt4/4-23.jpg") no-repeat center center;
+      background-size: cover;
+    }
+    #page24 {
+      background: url("https://daryeaye.github.io/gt4/4-24.jpg") no-repeat center center;
+      background-size: cover;
+    }
+  </style>
+</head>
+<body>
+  <div id="app-container">
+    <div id="header">
+      <div id="header-top">
+        <div>
+          <input type="text" id="username" placeholder="Enter your name" style="font-size:16px; padding:5px;" />
+          <button id="confirmBtn" onclick="confirmName()">Confirm</button>
+        </div>
+        <div id="translation-widget">
+          <span style="font-size: 18px;">Need translation?</span>
+          <span style="font-size: 22px; margin-left: 10px;">
+            <a href="https://drive.google.com/file/d/1cSjieAshzJHuaMjPMQzFqksmdeTJDz2s/view?usp=sharing" target="_blank">Open me!</a>
+          </span>
+        </div>
+      </div>
+      <div id="progressBar">
+        <div id="progress"></div>
+      </div>
+      <span id="progressText">0% completed</span>
+    </div>
+
+    <div id="container">
+      <!-- Page 1: Keep as is -->
+      <div id="page1" class="page active">
+        <a href="https://daryeaye.github.io/geotopia/GT1%20Officer+.pdf" target="_blank">
+          <div class="box" style="left:12px; top:385px; width:120px; height:108px; border: 1px solid red;"></div>
+        </a>
+        <a href="https://daryeaye.github.io/geotopia/GT1%20Professor+.pdf" target="_blank">
+          <div class="box" style="left:153px; top:385px; width:120px; height:108px; border: 1px solid red;"></div>
+        </a>
+        <a href="https://daryeaye.github.io/geotopia/GT1%20Hacker+.pdf" target="_blank">
+          <div class="box" style="left:293px; top:385px; width:120px; height:108px; border: 1px solid red;"></div>
+        </a>
+      </div>
+
+      <!-- Page 2: Empty (text box removed) -->
+      <div id="page2" class="page"></div>
+
+      <!-- Page 3: 5 typeable text boxes (font 18) -->
+      <div id="page3" class="page">
+        <input type="text" id="page3_input1" class="typeable page3-input" style="left:22px; top:191px; width:112px; height:30px;">
+        <input type="text" id="page3_input2" class="typeable page3-input" style="left:22px; top:287px; width:139px; height:30px;">
+        <input type="text" id="page3_input3" class="typeable page3-input" style="left:219px; top:325px; width:153px; height:30px;">
+        <input type="text" id="page3_input4" class="typeable page3-input" style="left:207px; top:384px; width:139px; height:30px;">
+        <input type="text" id="page3_input5" class="typeable page3-input" style="left:270px; top:421px; width:139px; height:30px;">
+      </div>
+
+      <!-- Page 4: Drawing Canvas (persistent lines) -->
+      <div id="page4" class="page">
+        <canvas id="canvas4" width="960" height="540" style="border:1px solid #ccc;"></canvas>
+        <button id="reset4" style="position: absolute; bottom: 10px; right: 10px;">Reset</button>
+      </div>
+
+      <!-- Page 5: Drawing Canvas (persistent lines) -->
+      <div id="page5" class="page">
+        <canvas id="canvas5" width="960" height="540" style="border:1px solid #ccc;"></canvas>
+        <button id="reset5" style="position: absolute; bottom: 10px; right: 10px;">Reset</button>
+      </div>
+
+      <!-- Page 6: GeoGebra embed (restored) -->
+      <div id="page6" class="page">
+        <!-- Existing GeoGebra embed remains here -->
+        <div style="transform: scale(0.7); transform-origin: top center; width: 100%; display: flex; justify-content: center; padding-top: 10px;">
+          <iframe src="https://www.geogebra.org/material/iframe/id/nwjp94mb/width/1200/height/600/border/888888/rc/false/ai/false"
+                  width="1200" height="500" style="border:0;"></iframe>
+        </div>
+        <!-- Add the two typeable boxes below -->
+        <input type="text" id="page6_input1" class="typeable" 
+              style="left:285px; top:399px; width:100px; height:44px;">
+        <input type="text" id="page6_input2" class="typeable" 
+              style="left:285px; top:474px; width:100px; height:43px;">
+      </div>
+
+      <!-- Page 7: 7 typeable boxes; input6 must contain 25, input7 must contain 3.14 -->
+      <div id="page7" class="page">
+        <input type="text" id="page7_input1" class="typeable" style="left:537px; top:226px; width:374px; height:43px;">
+        <input type="text" id="page7_input2" class="typeable" style="left:268px; top:226px; width:117px; height:43px;">
+        <input type="text" id="page7_input3" class="typeable" style="left:537px; top:273px; width:374px; height:43px;">
+        <input type="text" id="page7_input4" class="typeable" style="left:268px; top:273px; width:117px; height:43px;">
+        <input type="text" id="page7_input5" class="typeable" style="left:537px; top:320px; width:374px; height:43px;">
+        <input type="text" id="page7_input6" class="typeable" style="left:170px; top:320px; width:117px; height:43px;">
+        <input type="text" id="page7_input7" class="typeable" style="left:671px; top:404px; width:166px; height:52px;">
+      </div>
+
+      <!-- Page 8: 3 typeable boxes; second must contain 21, third must contain 15 -->
+      <div id="page8" class="page">
+        <input type="text" id="page8_input1" class="typeable" style="left:707px; top:124px; width:68px; height:46px;">
+        <input type="text" id="page8_input2" class="typeable" style="left:49px; top:168px; width:104px; height:46px;">
+        <input type="text" id="page8_input3" class="typeable" style="left:492px; top:207px; width:102px; height:44px;">
+      </div>
+
+      <!-- Page 9: Embed with unique warning modal for proceeding -->
+      <div id="page9" class="page">
+        <div style="transform: scale(0.7); transform-origin: top center; width: 100%; display: flex; justify-content: center; padding-top: 10px;">
+          <iframe src="https://daryeaye.github.io/gt4/circle.html"
+                  width="1200" height="600" style="border:0;">
+          </iframe>
+        </div>
+        <div id="page9_modal" style="display:none; position: absolute; top:50%; left:50%; transform: translate(-50%, -50%); background:#fff; border:2px solid black; padding:20px; z-index:1000;">
+          <p>Chef Mario needs to make sure you’ve watched the whole process from start to finish.</p>
+          <button onclick="finishPage9()">Finished</button>
+          <button onclick="cancelPage9()">Not yet</button>
+        </div>
+      </div>
+
+      <!-- Page 10: Now includes the GeoGebra embed from old page 11 plus the two text boxes -->
+      <div id="page10" class="page">
+        <div style="transform: scale(0.7); transform-origin: top center; width: 100%; display: flex; justify-content: center; padding-top: 10px;">
+          <iframe src="https://www.geogebra.org/material/iframe/id/wrnwxz65/width/1200/height/700/border/888888/rc/false/ai/false"
+                  width="1200" height="570" style="border:0;">
+          </iframe>
+        </div>
+        <input type="text" id="page10_input1" class="typeable" style="left:780px; top:414px; width:100px; height:43px;">
+        <input type="text" id="page10_input2" class="typeable" style="left:765px; top:459px; width:100px; height:43px;">
+      </div>
+
+      <!-- Page 11: 10 typeable boxes with specified coordinates and constraints -->
+      <div id="page11" class="page">
+        <input type="text" id="page11_input1" class="typeable" style="left:631px; top:215px; width:292px; height:43px;">
+        <input type="text" id="page11_input2" class="typeable" style="left:374px; top:216px; width:171px; height:43px;">
+        <input type="text" id="page11_input3" class="typeable" style="left:147px; top:216px; width:117px; height:43px;">
+        <input type="text" id="page11_input4" class="typeable" style="left:631px; top:266px; width:292px; height:43px;">
+        <input type="text" id="page11_input5" class="typeable" style="left:374px; top:266px; width:171px; height:43px;">
+        <input type="text" id="page11_input6" class="typeable" style="left:147px; top:266px; width:117px; height:43px;">
+        <input type="text" id="page11_input7" class="typeable" style="left:321px; top:315px; width:104px; height:43px;">
+        <input type="text" id="page11_input8" class="typeable" style="left:147px; top:315px; width:117px; height:43px;">
+        <input type="text" id="page11_input9" class="typeable" style="left:631px; top:316px; width:292px; height:43px;">
+        <input type="text" id="page11_input10" class="typeable" style="left:442px; top:425px; width:142px; height:52px;">
+      </div>
+
+      <!-- Page 12: 3 typeable boxes; left must contain 18, bottom right 38 -->
+      <div id="page12" class="page">
+        <input type="text" id="page12_input1" class="typeable" style="left:258px; top:139px; width:119px; height:45px;">
+        <input type="text" id="page12_input2" class="typeable" style="left:787px; top:139px; width:86px; height:44px;">
+        <input type="text" id="page12_input3" class="typeable" style="left:769px; top:188px; width:114px; height:45px;">
+      </div>
+
+      <!-- Page 13: 7 draggable, moveable non-typeable boxes (positions persist) -->
+      <div id="page13" class="page">
+        <div id="page13_box1" class="draggable" style="left:836px; top:146px; width:61px; height:75px; position:absolute; border:1px solid black; text-align:center; line-height:75px;">r</div>
+        <div id="page13_box2" class="draggable" style="left:750px; top:150px; width:61px; height:67px; position:absolute; border:1px solid black; text-align:center; line-height:67px;">π</div>
+        <div id="page13_box3" class="draggable" style="left:790px; top:237px; width:61px; height:74px; position:absolute; border:1px solid black; text-align:center; line-height:74px;">π</div>
+        <div id="page13_box4" class="draggable" style="left:874px; top:237px; width:60px; height:74px; position:absolute; border:1px solid black; text-align:center; line-height:74px;">2</div>
+        <div id="page13_box5" class="draggable" style="left:707px; top:239px; width:61px; height:75px; position:absolute; border:1px solid black; text-align:center; line-height:75px;">π</div>
+        <div id="page13_box6" class="draggable" style="left:734px; top:327px; width:61px; height:75px; position:absolute; border:1px solid black; text-align:center; line-height:75px;">d</div>
+        <div id="page13_box7" class="draggable" style="left:840px; top:327px; width:75px; height:74px; position:absolute; border:1px solid black; text-align:center; line-height:74px;">r²</div>
+      </div>
+
+      <!-- Page 14: Nothing -->
+      <div id="page14" class="page"></div>
+
+      <!-- Page 15: One typeable box (font 20) that must contain 314 -->
+      <div id="page15" class="page">
+        <input type="text" id="page15_input1" class="typeable" style="left:427px; top:226px; width:420px; height:205px; font-size:20px;">
+      </div>
+
+      <!-- Page 16: 3 typeable boxes; middle must contain 23, lower 45 -->
+      <div id="page16" class="page">
+        <input type="text" id="page16_input1" class="typeable" style="left:570px; top:91px; width:82px; height:45px;">
+        <input type="text" id="page16_input2" class="typeable" style="left:484px; top:254px; width:327px; height:80px;">
+        <input type="text" id="page16_input3" class="typeable" style="left:484px; top:389px; width:327px; height:80px;">
+      </div>
+
+      <!-- Page 17: 3 typeable boxes; middle must contain 28, bottom 63 -->
+      <div id="page17" class="page">
+        <input type="text" id="page17_input1" class="typeable" style="left:596px; top:150px; width:82px; height:45px;">
+        <input type="text" id="page17_input2" class="typeable" style="left:484px; top:254px; width:327px; height:80px;">
+        <input type="text" id="page17_input3" class="typeable" style="left:484px; top:389px; width:327px; height:80px;">
+      </div>
+
+      <!-- Page 18: 3 typeable boxes; middle and bottom must each contain 12 -->
+      <div id="page18" class="page">
+        <input type="text" id="page18_input1" class="typeable" style="left:579px; top:89px; width:82px; height:45px;">
+        <input type="text" id="page18_input2" class="typeable" style="left:484px; top:254px; width:327px; height:80px;">
+        <input type="text" id="page18_input3" class="typeable" style="left:484px; top:389px; width:327px; height:80px;">
+      </div>
+
+      <!-- Page 19: 3 typeable boxes; middle must contain 18, bottom 28 -->
+      <div id="page19" class="page">
+        <input type="text" id="page19_input1" class="typeable" style="left:596px; top:150px; width:82px; height:45px;">
+        <input type="text" id="page19_input2" class="typeable" style="left:484px; top:254px; width:327px; height:80px;">
+        <input type="text" id="page19_input3" class="typeable" style="left:484px; top:389px; width:327px; height:80px;">
+      </div>
+
+      <!-- Page 20: 3 typeable boxes; bottom must contain 7 -->
+      <div id="page20" class="page">
+        <input type="text" id="page20_input1" class="typeable" style="left:573px; top:90px; width:82px; height:45px;">
+        <input type="text" id="page20_input2" class="typeable" style="left:596px; top:150px; width:82px; height:45px;">
+        <input type="text" id="page20_input3" class="typeable" style="left:484px; top:389px; width:327px; height:80px;">
+      </div>
+
+      <!-- Page 21: 3 typeable boxes; bottom must contain 490 -->
+      <div id="page21" class="page">
+        <input type="text" id="page21_input1" class="typeable" style="left:573px; top:90px; width:82px; height:45px;">
+        <input type="text" id="page21_input2" class="typeable" style="left:596px; top:150px; width:82px; height:45px;">
+        <input type="text" id="page21_input3" class="typeable" style="left:484px; top:389px; width:327px; height:80px;">
+      </div>
+
+      <!-- Page 22: Nothing -->
+      <div id="page22" class="page"></div>
+
+      <!-- Page 23: 1 typeable box with special validation -->
+      <div id="page23" class="page">
+          <input type="text" id="page23_input1" class="typeable" style="left:391px; top:373px; width:178px; height:44px;">
+          <button id="unlockButton" style="position: absolute; left:391px; top:415px; width:100px; height:30px;" onclick="unlockPage23()">Unlock</button>
+      </div>
+
+      <!-- Page 24: Non-typeable box, 50% transparent blue linking to blooket -->
+      <div id="page24" class="page">
+        <a href="https://daryeaye.github.io/gt4/alun.html" target="_blank" style="display:block; position:absolute; left:310px; top:435px; width:370px; height:45px; background: rgba(0,0,255,0.5); text-decoration:none;"></a>
+      </div>
+    </div>
+    <div id="nav-buttons">
+      <button id="prev-btn" onclick="prevPage()">Previous</button>
+      <button id="next-btn" onclick="nextPage()">Next</button>
+    </div>
+  </div>
+
+  <script>
+    let currentPage = 1;
+    const totalPages = 24;
+    let maxPageVisited = 1;
+
+    function updateProgress() {
+      const progressPercent = (maxPageVisited / totalPages) * 100;
+      document.getElementById('progress').style.width = progressPercent + '%';
+      document.getElementById('progressText').innerText = progressPercent.toFixed(0) + '% completed';
+    }
+
+    function validateCurrentPage() {
+      // Page 3: at least 3 of 5 boxes filled
+      if (currentPage === 3) {
+        let filledCount = 0;
+        for (let i = 1; i <= 5; i++) {
+          const input = document.getElementById('page3_input' + i);
+          if (input && input.value.trim() !== '') filledCount++;
+        }
+        if (filledCount < 3) {
+          alert("🙁Chef Mario is unhappy. Let’s make it correct.");
+          return false;
+        }
+      }
+      // Page 7: input6 must contain '25' and input7 must contain '3.14'
+      if (currentPage === 7) {
+        const input6 = document.getElementById('page7_input6');
+        const input7 = document.getElementById('page7_input7');
+        if (input6 && !input6.value.includes('25')) {
+          alert("🙁Chef Mario is unhappy. Let’s make it correct.");
+          return false;
+        }
+        if (input7 && !input7.value.includes('3.14')) {
+          alert("🙁Chef Mario is unhappy. Let’s make it correct.");
+          return false;
+        }
+      }
+      // Page 8: input2 must contain '21' and input3 must contain '15'
+      if (currentPage === 8) {
+        const input2 = document.getElementById('page8_input2');
+        const input3 = document.getElementById('page8_input3');
+        if (input2 && !input2.value.includes('21')) {
+          alert("🙁Chef Mario is unhappy. Let’s make it correct.");
+          return false;
+        }
+        if (input3 && !input3.value.includes('15')) {
+          alert("🙁Chef Mario is unhappy. Let’s make it correct.");
+          return false;
+        }
+      }
+      // Page 10: input1 must contain '15' and input2 must contain '12'
+      if (currentPage === 10) {
+        const input1 = document.getElementById('page10_input1');
+        const input2 = document.getElementById('page10_input2');
+        if (input1 && !input1.value.includes('15')) {
+          alert("🙁Chef Mario is unhappy. Let’s make it correct.");
+          return false;
+        }
+        if (input2 && !input2.value.includes('12')) {
+          alert("🙁Chef Mario is unhappy. Let’s make it correct.");
+          return false;
+        }
+      }
+      // Page 11: input7 must contain '254', input8 '81', input10 '3.14'
+      if (currentPage === 11) {
+        const input7 = document.getElementById('page11_input7');
+        const input8 = document.getElementById('page11_input8');
+        const input10 = document.getElementById('page11_input10');
+        if (input7 && !input7.value.includes('254')) {
+          alert("🙁Chef Mario is unhappy. Let’s make it correct.");
+          return false;
+        }
+        if (input8 && !input8.value.includes('81')) {
+          alert("🙁Chef Mario is unhappy. Let’s make it correct.");
+          return false;
+        }
+        if (input10 && !input10.value.includes('3.14')) {
+          alert("🙁Chef Mario is unhappy. Let’s make it correct.");
+          return false;
+        }
+      }
+      // Page 12: input1 must contain '18' and input3 must contain '38'
+      if (currentPage === 12) {
+        const input1 = document.getElementById('page12_input1');
+        const input3 = document.getElementById('page12_input3');
+        if (input1 && !input1.value.includes('18')) {
+          alert("🙁Chef Mario is unhappy. Let’s make it correct.");
+          return false;
+        }
+        if (input3 && !input3.value.includes('38')) {
+          alert("🙁Chef Mario is unhappy. Let’s make it correct.");
+          return false;
+        }
+      }
+      // Page 15: input must contain '314'
+      if (currentPage === 15) {
+        const input = document.getElementById('page15_input1');
+        if (input && !input.value.includes('314')) {
+          alert("🙁Chef Mario is unhappy. Let’s make it correct.");
+          return false;
+        }
+      }
+      // Page 16: input2 must contain '23', input3 '45'
+      if (currentPage === 16) {
+        const input2 = document.getElementById('page16_input2');
+        const input3 = document.getElementById('page16_input3');
+        if (input2 && !input2.value.includes('23')) {
+          alert("🙁Chef Mario is unhappy. Let’s make it correct.");
+          return false;
+        }
+        if (input3 && !input3.value.includes('45')) {
+          alert("🙁Chef Mario is unhappy. Let’s make it correct.");
+          return false;
+        }
+      }
+      // Page 17: input2 must contain '28', input3 '63'
+      if (currentPage === 17) {
+        const input2 = document.getElementById('page17_input2');
+        const input3 = document.getElementById('page17_input3');
+        if (input2 && !input2.value.includes('28')) {
+          alert("🙁Chef Mario is unhappy. Let’s make it correct.");
+          return false;
+        }
+        if (input3 && !input3.value.includes('63')) {
+          alert("🙁Chef Mario is unhappy. Let’s make it correct.");
+          return false;
+        }
+      }
+      // Page 18: input2 and input3 must each contain '12'
+      if (currentPage === 18) {
+        const input2 = document.getElementById('page18_input2');
+        const input3 = document.getElementById('page18_input3');
+        if (input2 && !input2.value.includes('12')) {
+          alert("🙁Chef Mario is unhappy. Let’s make it correct.");
+          return false;
+        }
+        if (input3 && !input3.value.includes('12')) {
+          alert("🙁Chef Mario is unhappy. Let’s make it correct.");
+          return false;
+        }
+      }
+      // Page 19: input2 must contain '18', input3 '28'
+      if (currentPage === 19) {
+        const input2 = document.getElementById('page19_input2');
+        const input3 = document.getElementById('page19_input3');
+        if (input2 && !input2.value.includes('18')) {
+          alert("🙁Chef Mario is unhappy. Let’s make it correct.");
+          return false;
+        }
+        if (input3 && !input3.value.includes('28')) {
+          alert("🙁Chef Mario is unhappy. Let’s make it correct.");
+          return false;
+        }
+      }
+      // Page 20: input3 must contain '7'
+      if (currentPage === 20) {
+        const input3 = document.getElementById('page20_input3');
+        if (input3 && !input3.value.includes('7')) {
+          alert("🙁Chef Mario is unhappy. Let’s make it correct.");
+          return false;
+        }
+      }
+      // Page 21: input3 must contain '490'
+      if (currentPage === 21) {
+        const input3 = document.getElementById('page21_input3');
+        if (input3 && !input3.value.includes('490')) {
+          alert("🙁Chef Mario is unhappy. Let’s make it correct.");
+          return false;
+        }
+      }
+      // Page 23: special validation
+      if (currentPage === 23) {
+        const input = document.getElementById('page23_input1');
+        if (input) {
+          if (input.value === '78.5ma') {
+            window.open("https://daryeaye.github.io/geotopia/adebayue.pdf", "_blank");
+            input.value = "";
+            return true;
+          } else if (input.value === '78.5') {
+            alert("✅Yes! Ask the merchant to open it!");
+            return false;
+          } else {
+            alert("🙁Chef Mario is unhappy. Let’s make it correct.");
+            return false;
+          }
+        }
+      }
+      return true;
+    }
+
+    function unlockPage23() {
+      const input = document.getElementById('page23_input1');
+      if (!input) return;
+      
+      // Check the three conditions:
+      if (input.value === '78.5ma') {
+        // If exactly '78.5ma', open the link and clear the input
+        window.open("https://daryeaye.github.io/geotopia/adebayue.pdf", "_blank");
+        input.value = "";
+        nextPage(); 
+      } else if (input.value === '78.5') {
+        // If exactly '78.5', show a positive message
+        alert("✅Yes! Ask the merchant to open it!");
+      } else {
+        // Otherwise, show an error message
+        alert("🙁Chef Mario is unhappy. Let’s make it correct.");
+      }
+    }
+
+    function showPage(pageNum) {
+      for (let i = 1; i <= totalPages; i++) {
+        const page = document.getElementById('page' + i);
+        if (page) page.classList.remove('active');
+      }
+      const newPage = document.getElementById('page' + pageNum);
+      if (newPage) newPage.classList.add('active');
+      document.getElementById("prev-btn").style.display = pageNum === 1 ? "none" : "inline-block";
+      document.getElementById("next-btn").style.display = pageNum === totalPages ? "none" : "inline-block";
+      updateProgress();
+    }
+
+    function nextPage() {
+      // Special handling for page 9: show modal instead of immediate navigation
+      if (currentPage === 9) {
+        document.getElementById('page9_modal').style.display = 'block';
+        return;
+      }
+      if (!validateCurrentPage()) return;
+      if (currentPage < totalPages) {
+        currentPage++;
+        if (currentPage > maxPageVisited) maxPageVisited = currentPage;
+        showPage(currentPage);
+      }
+    }
+
+    function prevPage() {
+      if (currentPage > 1) {
+        currentPage--;
+        showPage(currentPage);
+      }
+    }
+
+    function confirmName() {
+      const nameInput = document.getElementById("username");
+      const name = nameInput.value.trim();
+      if (name !== "") {
+        localStorage.setItem("username", name);
+        nameInput.disabled = true;
+        alert("Name confirmed as: " + name);
+      } else {
+        alert("Please enter a name.");
+      }
+    }
+
+    function setupPersistence() {
+      const storedName = localStorage.getItem("username");
+      const nameInput = document.getElementById("username");
+      if (storedName !== null && storedName !== "") {
+        nameInput.value = storedName;
+        nameInput.disabled = true;
+      }
+      const inputs = document.querySelectorAll("input[type='text']");
+      inputs.forEach(el => {
+        const stored = localStorage.getItem(el.id);
+        if (stored !== null) {
+          el.value = stored;
+        }
+        el.addEventListener("input", () => {
+          localStorage.setItem(el.id, el.value);
+        });
+      });
+    }
+
+    // Setup drawing on canvas with persistent lines (stored in localStorage)
+    function setupDrawing(canvasId, resetButtonId, storageKey) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+      let isDrawing = false;
+      let startX = 0;
+      let startY = 0;
+      let lines = [];
+      const storedLines = localStorage.getItem(storageKey);
+      if (storedLines) {
+        try {
+          lines = JSON.parse(storedLines);
+          redrawLines();
+        } catch(e) {
+          lines = [];
+        }
+      }
+      function redrawLines() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        lines.forEach(function(line) {
+          ctx.beginPath();
+          ctx.moveTo(line.startX, line.startY);
+          ctx.lineTo(line.endX, line.endY);
+          ctx.strokeStyle = 'red';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+        });
+      }
+      canvas.addEventListener('mousedown', function(e) {
+        if (lines.length >= 3) return;
+        isDrawing = true;
+        const rect = canvas.getBoundingClientRect();
+        startX = e.clientX - rect.left;
+        startY = e.clientY - rect.top;
+      });
+      canvas.addEventListener('mousemove', function(e) {
+        if (!isDrawing) return;
+        const rect = canvas.getBoundingClientRect();
+        const currentX = e.clientX - rect.left;
+        const currentY = e.clientY - rect.top;
+        redrawLines();
+        ctx.beginPath();
+        ctx.moveTo(startX, startY);
+        ctx.lineTo(currentX, currentY);
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      });
+      canvas.addEventListener('mouseup', function(e) {
+        if (!isDrawing) return;
+        isDrawing = false;
+        const rect = canvas.getBoundingClientRect();
+        const endX = e.clientX - rect.left;
+        const endY = e.clientY - rect.top;
+        lines.push({ startX, startY, endX, endY });
+        localStorage.setItem(storageKey, JSON.stringify(lines));
+        redrawLines();
+      });
+      canvas.addEventListener('mouseleave', function(e) {
+        if (isDrawing) {
+          isDrawing = false;
+          const rect = canvas.getBoundingClientRect();
+          const endX = e.clientX - rect.left;
+          const endY = e.clientY - rect.top;
+          lines.push({ startX, startY, endX, endY });
+          localStorage.setItem(storageKey, JSON.stringify(lines));
+          redrawLines();
+        }
+      });
+      const resetBtn = document.getElementById(resetButtonId);
+      resetBtn.addEventListener('click', function() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        lines = [];
+        localStorage.removeItem(storageKey);
+      });
+    }
+
+    // Setup draggable boxes on page 13; positions persist via localStorage
+    function setupDraggable(boxId) {
+      const box = document.getElementById(boxId);
+      let offsetX, offsetY;
+      box.addEventListener('mousedown', function(e) {
+        offsetX = e.clientX - box.offsetLeft;
+        offsetY = e.clientY - box.offsetTop;
+        function mouseMoveHandler(e) {
+          box.style.left = (e.clientX - offsetX) + 'px';
+          box.style.top = (e.clientY - offsetY) + 'px';
+        }
+        function mouseUpHandler() {
+          document.removeEventListener('mousemove', mouseMoveHandler);
+          document.removeEventListener('mouseup', mouseUpHandler);
+          localStorage.setItem(boxId, JSON.stringify({ left: box.style.left, top: box.style.top }));
+        }
+        document.addEventListener('mousemove', mouseMoveHandler);
+        document.addEventListener('mouseup', mouseUpHandler);
+      });
+      const savedPos = localStorage.getItem(boxId);
+      if (savedPos) {
+        const pos = JSON.parse(savedPos);
+        box.style.left = pos.left;
+        box.style.top = pos.top;
+      }
+    }
+
+    function finishPage9() {
+      document.getElementById('page9_modal').style.display = 'none';
+      if (!validateCurrentPage()) return;
+      currentPage++;
+      if (currentPage > maxPageVisited) maxPageVisited = currentPage;
+      showPage(currentPage);
+    }
+
+    function cancelPage9() {
+      document.getElementById('page9_modal').style.display = 'none';
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      showPage(currentPage);
+      setupPersistence();
+      setupDrawing('canvas4', 'reset4', 'canvas4_lines');
+      setupDrawing('canvas5', 'reset5', 'canvas5_lines');
+      for (let i = 1; i <= 7; i++) {
+        setupDraggable('page13_box' + i);
+      }
+    });
+  </script>
+</body>
+</html>
