@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Lost Treasure Pt4 Chef Mario</title>
+  <title>Geotopia Pt4 Chef Mario</title>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet">
   <style>
     body, html {
@@ -468,15 +468,15 @@
           return false;
         }
       }
-      // Page 10: 
+      // Page 10: input1 must contain '15' and input2 must contain '12'
       if (currentPage === 10) {
         const input1 = document.getElementById('page10_input1');
         const input2 = document.getElementById('page10_input2');
-        if (input1 && !input1.value.includes('81')) {
+        if (input1 && !input1.value.includes('15')) {
           alert("🙁Chef Mario is unhappy. Let’s make it correct.");
           return false;
         }
-        if (input2 && !input2.value.includes('50')) {
+        if (input2 && !input2.value.includes('12')) {
           alert("🙁Chef Mario is unhappy. Let’s make it correct.");
           return false;
         }
@@ -588,22 +588,9 @@
           return false;
         }
       }
-      // Page 23: special validation
+      // Page 23: allow Next button to advance without validating the input
       if (currentPage === 23) {
-        const input = document.getElementById('page23_input1');
-        if (input) {
-          if (input.value === '78.5ma') {
-            window.open("https://daryeaye.github.io/geotopia/adebayue.pdf", "_blank");
-            input.value = "";
-            return true;
-          } else if (input.value === '78.5') {
-            alert("✅Yes! Ask the merchant to open it!");
-            return false;
-          } else {
-            alert("🙁Chef Mario is unhappy. Let’s make it correct.");
-            return false;
-          }
-        }
+        return true;
       }
       return true;
     }
