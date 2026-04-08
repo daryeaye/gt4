@@ -5,14 +5,13 @@
   <title>Lost Treasure Pt4 Chef Mario</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Love+Ya+Like+A+Sister&display=swap" rel="stylesheet" />
 
-  <!-- html2canvas (translation widget screenshot) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-  <!-- PDF.js (Best fix for Google Sites: render PDF in-page, no iframe) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
   <style>
+
     body, html {
       margin: 0;
       padding: 0;
@@ -249,30 +248,349 @@
     }
     #selection-overlay{position:fixed;top:0;left:0;width:100%;height:100%;cursor:crosshair;z-index:1000}
     #selection-box{position:absolute;border:2px dashed red;background:rgba(0,0,0,0.1)}
+  
+
+    #tutorialOverlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      z-index: 10000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    #tutorialBox{
+      position: relative;
+      width: min(860px, 88vw);
+      height: min(500px, 78vh);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #tutorialImage{
+      max-width: 100%;
+      max-height: 100%;
+      display: block;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.35);
+    }
+    #tutorialNext{
+      position: absolute;
+      right: -18px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 56px;
+      height: 50%;
+      min-height: 140px;
+      border: none;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.88);
+      color: #111;
+      font-size: 42px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+      line-height: 1;
+      font-family: "Love Ya Like A Sister", cursive;
+    }
+    #tutorialNext:hover{ background: rgba(255,255,255,0.96); }
+
+    #header {
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      box-sizing:border-box;
+    }
+    #topAuthRow, #progressRow {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      width:100%;
+      box-sizing:border-box;
+    }
+    #topAuthLeft {
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    #authStatus {
+      font-size: 15px;
+      font-family: "Comic Sans MS", sans-serif;
+      color: #222;
+      min-width: 170px;
+      text-align: right;
+    }
+    #progressText {
+      font-size: 16px;
+      white-space: nowrap;
+    }
+    #saveStatus {
+      font-size: 13px;
+      color: #444;
+      min-width: 120px;
+      text-align: right;
+    }
+
+    #logoutBtn, #introBtn, #authRegisterBtn, #authLoginBtn, #openFileBtn, #prev-btn, #next-btn, #collapse-widget,
+    #side-widget button:not(#collapse-widget), .popupBtn {
+      font-family: "Love Ya Like A Sister", cursive;
+    }
+    #logoutBtn, #introBtn, #authRegisterBtn, #authLoginBtn {
+      font-size: 22px;
+      padding: 6px 12px;
+      cursor: pointer;
+      background-color: lightblue;
+      border: none;
+      line-height: 1;
+      border-radius: 6px;
+    }
+
+    #authOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.78);
+      z-index: 15000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    #authOverlayBox {
+      width: min(430px, 88vw);
+      background: #fffdf7;
+      border: 3px solid #000;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      padding: 24px 20px 18px;
+      text-align: center;
+      box-sizing: border-box;
+    }
+    #authOverlayTitle {
+      font-family: "Love Ya Like A Sister", cursive;
+      font-size: 34px;
+      line-height: 1.05;
+      margin-bottom: 10px;
+      color: #111;
+    }
+    #authOverlayText {
+      font-family: "Comic Sans MS", sans-serif;
+      font-size: 16px;
+      line-height: 1.35;
+      color: #222;
+      margin-bottom: 14px;
+    }
+    #auth-username, #auth-password {
+      width: 100%;
+      font-size: 18px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+      border: 2px solid #000;
+      border-radius: 8px;
+      font-family: "Comic Sans MS", sans-serif;
+      background: #fff;
+    }
+    #authOverlayButtons {
+      display:flex;
+      justify-content:center;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-top:6px;
+    }
+    #authModalStatus {
+      font-family: "Comic Sans MS", sans-serif;
+      font-size: 14px;
+      line-height: 1.3;
+      min-height: 18px;
+      margin-top: 12px;
+      color: #222;
+    }
+
+    #customPopupOverlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      z-index: 20000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    #customPopupBox{
+      width: min(430px, 88vw);
+      background: #fffdf7;
+      border: 3px solid #000;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      padding: 24px 20px 18px;
+      text-align: center;
+      font-family: "Comic Sans MS", sans-serif;
+    }
+    #customPopupText{
+      font-size: 24px;
+      line-height: 1.35;
+      color: #111;
+      margin-bottom: 18px;
+    }
+    #customPopupButtons{
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .popupBtn{
+      font-size: 24px;
+      background: lightblue;
+      border: 2px solid #000;
+      border-radius: 10px;
+      padding: 8px 20px;
+      cursor: pointer;
+    }
+
+    #pageTransitionOverlay{
+      position:absolute;
+      inset:0;
+      background:#000;
+      z-index:10050;
+      opacity:0;
+      pointer-events:none;
+      transition: opacity 0.28s ease;
+    }
+
+    #openFileWrap{
+      width:960px;
+      text-align:center;
+      margin-top:10px;
+    }
+    #openFileBtn{
+      font-size:20px;
+      padding:8px 16px;
+      background:lightblue;
+      border:none;
+      cursor:pointer;
+      border-radius:6px;
+      line-height:1;
+    }
+
+    #pdfStatus {
+      position:absolute;
+      top:10px;
+      left:10px;
+      font-family:"Comic Sans MS",sans-serif;
+      font-size:14px;
+      color:#111;
+      background:rgba(255,255,255,0.85);
+      padding:6px 10px;
+      border:1px solid rgba(0,0,0,0.15);
+      border-radius:6px;
+      z-index:10;
+      display:none;
+    }
+
+    #side-widget {
+      transition: all 0.25s ease;
+      z-index: 999;
+    }
+    #side-widget.collapsed {
+      width: 120px;
+      height: 24px;
+      padding: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      background: rgba(249,249,249,0.95);
+      border: 1px solid #ccc;
+      font-family: "Comic Sans MS", sans-serif;
+      font-size: 8px;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    #side-widget.collapsed * {
+      display: none !important;
+    }
+    #side-widget.collapsed::after {
+      content: "Translation";
+    }
+    #collapse-widget {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 22px;
+      height: 22px;
+      padding: 0;
+      line-height: 1;
+      font-size: 14px;
+      background: lightblue;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: "Comic Sans MS", sans-serif;
+    }
+
+    .typeable, .page3-input {
+      resize: none;
+    }
+
   </style>
 </head>
 
 <body>
+  <div id="tutorialOverlay">
+    <div id="tutorialBox">
+      <img id="tutorialImage" alt="Tutorial" />
+      <button id="tutorialNext" type="button">›</button>
+    </div>
+  </div>
+
+  <div id="authOverlay">
+    <div id="authOverlayBox">
+      <div id="authOverlayTitle">Sign in to start</div>
+      <div id="authOverlayText">Please log in or register before entering the quest. Username cannot contain spaces.</div>
+      <input type="text" id="auth-username" placeholder="Username" autocomplete="username" />
+      <input type="password" id="auth-password" placeholder="Password" autocomplete="current-password" />
+      <div id="authOverlayButtons">
+        <button id="authRegisterBtn" type="button">Register</button>
+        <button id="authLoginBtn" type="button">Log In</button>
+      </div>
+      <div id="authModalStatus"></div>
+    </div>
+  </div>
+
+  <div id="customPopupOverlay">
+    <div id="customPopupBox">
+      <div id="customPopupText"></div>
+      <div id="customPopupButtons"></div>
+    </div>
+  </div>
+
   <div id="app-container">
     <div id="header">
-      <div id="header-top">
-        <div>
-          <input type="text" id="username" placeholder="Enter your name" style="font-size:16px; padding:5px;" />
-          <button id="confirmBtn" onclick="confirmName()">Confirm</button>
-          <button id="introBtn" onclick="openIntro()">Intro</button>
+      <div id="topAuthRow">
+        <div id="topAuthLeft">
+          <button id="logoutBtn" type="button" style="display:none;">Log Out</button>
+          <button id="introBtn" type="button">Intro</button>
         </div>
+        <div id="authStatus">Not logged in</div>
       </div>
-      <div id="progressBar"><div id="progress"></div></div>
-      <span id="progressText">0% completed</span>
+      <div id="progressRow">
+        <div id="progressBar"><div id="progress"></div></div>
+        <span id="progressText">0% completed</span>
+        <span id="saveStatus">Not saved yet</span>
+      </div>
     </div>
 
     <div id="stage-row">
       <div id="nav-buttons">
-        <button id="prev-btn" onclick="prevPage()">Previous</button>
-        <button id="next-btn" onclick="nextPage()">Next</button>
+        <button id="prev-btn" type="button">Previous</button>
+        <button id="next-btn" type="button">Next</button>
       </div>
 
       <div id="container">
+
         <!-- PAGE 1: role boxes removed + role-for button removed -->
         <div id="page1" class="page active"></div>
 
@@ -421,11 +739,13 @@
           <a href="https://daryeaye.github.io/gt4/alun.html" target="_blank"
              style="display:block;position:absolute;left:310px;top:435px;width:370px;height:45px;background:rgba(0,0,255,0.5);text-decoration:none;"></a>
         </div>
+      
+        <div id="pageTransitionOverlay"></div>
       </div>
     </div>
 
-    <!-- SECOND CANVAS: Role selection + PDF.js viewer -->
     <div id="role-container">
+      <div id="pdfStatus">Loading PDF...</div>
       <div id="role-stage">
         <!-- Hotspots scaled from 1600x900 -> 960x540 (x0.6) -->
         <button class="role-hotspot" id="hotspot-officer"  title="Officer"
@@ -447,8 +767,10 @@
       </div>
     </div>
 
-    <!-- Translation widget -->
-    <div id="side-widget">
+    <div id="openFileWrap"><button id="openFileBtn" type="button">Open the file on a new tab</button></div>
+
+    <div id="side-widget" class="collapsed" aria-label="Translation widget">
+      <button id="collapse-widget" type="button" aria-label="Collapse translation widget">–</button>
       <p class="title">Need translation?</p>
       <button id="select-text">Select Text</button>
       <p><a href="https://translate.google.com/?sl=en&tl=es&op=images" target="_blank">Click me and paste from clipboard</a></p>
@@ -456,407 +778,985 @@
   </div>
 
   <script>
-    // PDF.js worker
-    pdfjsLib.GlobalWorkerOptions.workerSrc =
-      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
-
-    // Role PDFs
+    const TUTORIAL_IMAGES = [
+      "https://daryeaye.github.io/geotopia/t2.jpg",
+      "https://daryeaye.github.io/geotopia/t3.jpg"
+    ];
+    const TUTORIAL_STORAGE_KEY = "lt4_tutorial_seen";
+    const APP_ID = "losttreasure-pt4";
+    const WORKER_BASE_URL = "https://geotopia-powerfall-auth-api.daryeaye.workers.dev";
+    const SESSION_STORAGE = {
+      token: "lt4_auth_token",
+      username: "lt4_auth_username"
+    };
+    const INTRO_URL = "https://www.youtube.com/watch?v=PFy9wgmUADc";
     const ROLE_PDFS = {
       officer:   "https://daryeaye.github.io/geotopia/GT1%20Officer+.pdf",
       professor: "https://daryeaye.github.io/geotopia/GT1%20Professor+.pdf",
       hacker:    "https://daryeaye.github.io/geotopia/GT1%20Hacker+.pdf"
     };
 
-    const roleStage = document.getElementById("role-stage");
-    const pdfView   = document.getElementById("pdf-view");
-    const pdfScroll = document.getElementById("pdf-scroll");
+    let currentPage = 1;
+    const totalPages = 24;
+    let maxPageVisited = 1;
 
-    async function loadPdfInSecondCanvas(url){
-      // switch to PDF mode
-      roleStage.style.display = "none";
-      pdfView.style.display = "block";
-      pdfScroll.innerHTML = "";
+    let authToken = "";
+    let authUsername = "";
+    let autoSaveTimer = null;
+    let saveInFlight = false;
+    let saveQueued = false;
+    let isApplyingRemoteData = false;
 
-      try{
-        const loadingTask = pdfjsLib.getDocument({ url });
-        const pdf = await loadingTask.promise;
+    let tutorialIndex = 0;
 
-        // Render each page scaled to fit width (approx 940px inside padding)
-        const targetWidth = 940;
+    let currentPdfUrl = "";
+    let pdfScrollTop = 0;
 
-        for(let pageNum=1; pageNum<=pdf.numPages; pageNum++){
-          const page = await pdf.getPage(pageNum);
+    const drawingData = {
+      canvas4_lines: [],
+      canvas5_lines: []
+    };
 
-          const viewport1 = page.getViewport({ scale: 1 });
-          const scale = targetWidth / viewport1.width;
-          const viewport = page.getViewport({ scale });
+    const draggablePositions = {};
+    const draggableDefaults = {};
 
-          const canvas = document.createElement("canvas");
-          const ctx = canvas.getContext("2d");
-          canvas.width = Math.floor(viewport.width);
-          canvas.height = Math.floor(viewport.height);
+    function openIntro() {
+      window.open(INTRO_URL, "_blank");
+    }
 
-          pdfScroll.appendChild(canvas);
+    function setSaveStatus(text) {
+      document.getElementById("saveStatus").textContent = text;
+    }
 
-          await page.render({ canvasContext: ctx, viewport }).promise;
-        }
-      }catch(err){
-        console.error(err);
-        alert("PDF failed to load in the canvas. Check Console for details.");
-        // fallback back to role stage
-        pdfView.style.display = "none";
-        roleStage.style.display = "block";
+    function setAuthStatus(message, isError = false) {
+      const authStatus = document.getElementById("authStatus");
+      authStatus.textContent = message;
+      authStatus.style.color = isError ? "#b00020" : "#222";
+    }
+
+    function setAuthModalStatus(message, isError = false) {
+      const status = document.getElementById("authModalStatus");
+      if (!status) return;
+      status.textContent = message || "";
+      status.style.color = isError ? "#b00020" : "#222";
+    }
+
+    function closeCustomPopup() {
+      document.getElementById("customPopupOverlay").style.display = "none";
+      document.getElementById("customPopupText").textContent = "";
+      document.getElementById("customPopupButtons").innerHTML = "";
+    }
+
+    function showCustomPopup(message, buttons = [{ text: "OK", action: closeCustomPopup }]) {
+      const overlay = document.getElementById("customPopupOverlay");
+      const text = document.getElementById("customPopupText");
+      const btnWrap = document.getElementById("customPopupButtons");
+
+      text.textContent = message;
+      btnWrap.innerHTML = "";
+
+      buttons.forEach(btn => {
+        const b = document.createElement("button");
+        b.className = "popupBtn";
+        b.textContent = btn.text;
+        b.onclick = () => {
+          closeCustomPopup();
+          if (btn.action) btn.action();
+        };
+        btnWrap.appendChild(b);
+      });
+
+      overlay.style.display = "flex";
+    }
+
+    function showMessagePopup(message) {
+      showCustomPopup(message, [{ text: "OK", action: closeCustomPopup }]);
+    }
+
+    function openAuthOverlay(prefillUsername = "") {
+      const overlay = document.getElementById("authOverlay");
+      const usernameInput = document.getElementById("auth-username");
+      const passwordInput = document.getElementById("auth-password");
+
+      usernameInput.value = prefillUsername || authUsername || "";
+      passwordInput.value = "";
+      setAuthModalStatus("Please sign in to continue.", false);
+      overlay.style.display = "flex";
+      usernameInput.focus();
+    }
+
+    function closeAuthOverlay() {
+      document.getElementById("authOverlay").style.display = "none";
+      setAuthModalStatus("", false);
+    }
+
+    function maybeRequireAuthOverlay() {
+      if (!authToken) {
+        openAuthOverlay(authUsername || "");
       }
     }
 
-    // Role hotspots
-    document.getElementById("hotspot-officer").addEventListener("click", () => loadPdfInSecondCanvas(ROLE_PDFS.officer));
-    document.getElementById("hotspot-professor").addEventListener("click", () => loadPdfInSecondCanvas(ROLE_PDFS.professor));
-    document.getElementById("hotspot-hacker").addEventListener("click", () => loadPdfInSecondCanvas(ROLE_PDFS.hacker));
+    function updateAuthUI() {
+      const loggedIn = !!authToken;
+      document.getElementById("logoutBtn").style.display = loggedIn ? "inline-block" : "none";
+      setAuthStatus(loggedIn ? ("Logged in as " + (authUsername || "student")) : "Not logged in", false);
+      if (loggedIn) {
+        closeAuthOverlay();
+      }
+    }
 
-    // Video hotspot opens new tab
-    document.getElementById("hotspot-video").addEventListener("click", () => {
-      window.open("https://www.youtube.com/watch?v=Fj98o3aFfk8", "_blank");
-    });
+    function saveSessionLocally(token, username) {
+      authToken = token || "";
+      authUsername = username || "";
+      localStorage.setItem(SESSION_STORAGE.token, authToken);
+      localStorage.setItem(SESSION_STORAGE.username, authUsername);
+      updateAuthUI();
+    }
 
-    // ----------------- Your original logic (kept) -----------------
-    let currentPage = 1, totalPages = 24, maxPageVisited = 1;
+    function clearSessionLocally() {
+      authToken = "";
+      authUsername = "";
+      localStorage.removeItem(SESSION_STORAGE.token);
+      localStorage.removeItem(SESSION_STORAGE.username);
+      updateAuthUI();
+    }
 
-    function updateProgress(){
+    function restoreSessionLocally() {
+      authToken = localStorage.getItem(SESSION_STORAGE.token) || "";
+      authUsername = localStorage.getItem(SESSION_STORAGE.username) || "";
+      updateAuthUI();
+    }
+
+    async function apiFetch(path, options = {}) {
+      const headers = {
+        "Content-Type": "application/json",
+        ...(options.headers || {})
+      };
+
+      if (authToken) {
+        headers.Authorization = "Bearer " + authToken;
+      }
+
+      const response = await fetch(WORKER_BASE_URL + path, {
+        method: options.method || "GET",
+        headers,
+        body: options.body
+      });
+
+      const json = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(json.error || "Request failed");
+      }
+      return json;
+    }
+
+    async function registerUser() {
+      const usernameInput = document.getElementById("auth-username");
+      const passwordInput = document.getElementById("auth-password");
+      const rawUsername = usernameInput.value || "";
+      const username = rawUsername.trim().toLowerCase();
+      const password = passwordInput.value;
+
+      if (!username || !password) {
+        setAuthStatus("Enter username and password", true);
+        setAuthModalStatus("Enter username and password.", true);
+        return;
+      }
+
+      if (/\s/.test(rawUsername)) {
+        setAuthStatus("Username cannot contain spaces", true);
+        setAuthModalStatus("Username cannot contain spaces.", true);
+        return;
+      }
+
+      setAuthStatus("Registering...");
+      setAuthModalStatus("Registering...", false);
+
+      try {
+        const result = await apiFetch("/api/register", {
+          method: "POST",
+          body: JSON.stringify({ username, password, appId: APP_ID })
+        });
+
+        saveSessionLocally(result.token, result.username || username);
+        passwordInput.value = "";
+        await loadProgressFromServer();
+        setAuthModalStatus("Account created.", false);
+        closeAuthOverlay();
+      } catch (err) {
+        setAuthStatus(err.message || "Register failed", true);
+        setAuthModalStatus(err.message || "Register failed", true);
+      }
+    }
+
+    async function loginUser() {
+      const usernameInput = document.getElementById("auth-username");
+      const passwordInput = document.getElementById("auth-password");
+      const rawUsername = usernameInput.value || "";
+      const username = rawUsername.trim().toLowerCase();
+      const password = passwordInput.value;
+
+      if (!username || !password) {
+        setAuthStatus("Enter username and password", true);
+        setAuthModalStatus("Enter username and password.", true);
+        return;
+      }
+
+      if (/\s/.test(rawUsername)) {
+        setAuthStatus("Username cannot contain spaces", true);
+        setAuthModalStatus("Username cannot contain spaces.", true);
+        return;
+      }
+
+      setAuthStatus("Logging in...");
+      setAuthModalStatus("Logging in...", false);
+
+      try {
+        const result = await apiFetch("/api/login", {
+          method: "POST",
+          body: JSON.stringify({ username, password, appId: APP_ID })
+        });
+
+        saveSessionLocally(result.token, result.username || username);
+        passwordInput.value = "";
+        await loadProgressFromServer();
+        setAuthModalStatus("Logged in.", false);
+        closeAuthOverlay();
+      } catch (err) {
+        setAuthStatus(err.message || "Login failed", true);
+        setAuthModalStatus(err.message || "Login failed", true);
+      }
+    }
+
+    function getInputSnapshot() {
+      const snapshot = {};
+      document.querySelectorAll("input.typeable").forEach(el => {
+        snapshot[el.id] = el.value || "";
+      });
+      return snapshot;
+    }
+
+    function applyInputSnapshot(snapshot) {
+      isApplyingRemoteData = true;
+      document.querySelectorAll("input.typeable").forEach(el => {
+        el.value = snapshot && Object.prototype.hasOwnProperty.call(snapshot, el.id)
+          ? (snapshot[el.id] ?? "")
+          : "";
+      });
+      isApplyingRemoteData = false;
+    }
+
+    function captureDraggableDefaults() {
+      document.querySelectorAll(".draggable").forEach(el => {
+        const style = window.getComputedStyle(el);
+        draggableDefaults[el.id] = {
+          left: parseFloat(style.left) || 0,
+          top: parseFloat(style.top) || 0
+        };
+        draggablePositions[el.id] = {
+          left: parseFloat(style.left) || 0,
+          top: parseFloat(style.top) || 0
+        };
+      });
+    }
+
+    function applyDraggableSnapshot(snapshot) {
+      document.querySelectorAll(".draggable").forEach(el => {
+        const pos = snapshot && snapshot[el.id] ? snapshot[el.id] : draggableDefaults[el.id];
+        if (!pos) return;
+        el.style.left = pos.left + "px";
+        el.style.top = pos.top + "px";
+        draggablePositions[el.id] = { left: pos.left, top: pos.top };
+      });
+    }
+
+    function buildProgressPayload() {
+      return {
+        currentPage,
+        maxPageVisited,
+        currentPdfUrl,
+        pdfScrollTop,
+        inputValues: getInputSnapshot(),
+        drawings: drawingData,
+        draggables: draggablePositions
+      };
+    }
+
+    async function applyProgressPayload(payload) {
+      const safe = payload && typeof payload === "object" ? payload : {};
+
+      applyInputSnapshot(safe.inputValues || {});
+
+      if (safe.drawings && typeof safe.drawings === "object") {
+        Object.keys(drawingData).forEach(key => {
+          drawingData[key] = Array.isArray(safe.drawings[key]) ? safe.drawings[key] : [];
+        });
+      } else {
+        Object.keys(drawingData).forEach(key => drawingData[key] = []);
+      }
+      redrawAllDrawingCanvases();
+
+      applyDraggableSnapshot(safe.draggables || {});
+
+      currentPage = Number.isInteger(Number(safe.currentPage)) ? Number(safe.currentPage) : 1;
+      if (currentPage < 1 || currentPage > totalPages) currentPage = 1;
+
+      maxPageVisited = Number.isInteger(Number(safe.maxPageVisited)) ? Number(safe.maxPageVisited) : currentPage;
+      if (maxPageVisited < currentPage) maxPageVisited = currentPage;
+      if (maxPageVisited > totalPages) maxPageVisited = totalPages;
+
+      currentPdfUrl = safe.currentPdfUrl || "";
+      pdfScrollTop = Number(safe.pdfScrollTop) || 0;
+
+      showPage(currentPage);
+
+      if (currentPdfUrl) {
+        await renderPdfIntoSecondCanvas(currentPdfUrl, true);
+      } else {
+        resetSecondCanvasToRoleStage();
+      }
+
+      document.getElementById("page9_modal").style.display = "none";
+    }
+
+    async function loadProgressFromServer() {
+      if (!authToken) return;
+
+      try {
+        const result = await apiFetch("/api/load?appId=" + encodeURIComponent(APP_ID), { method: "GET" });
+        if (result.username) {
+          authUsername = result.username;
+          localStorage.setItem(SESSION_STORAGE.username, authUsername);
+        }
+        await applyProgressPayload(result.saveData || {});
+        updateAuthUI();
+        setSaveStatus("Loaded");
+      } catch (err) {
+        setAuthStatus(err.message || "Could not load progress", true);
+      }
+    }
+
+    async function saveProgressToServer() {
+      if (!authToken || saveInFlight) return;
+      saveInFlight = true;
+
+      try {
+        setSaveStatus("Saving...");
+        await apiFetch("/api/save", {
+          method: "POST",
+          body: JSON.stringify({
+            appId: APP_ID,
+            saveData: buildProgressPayload()
+          })
+        });
+        setSaveStatus("Saved");
+      } catch (err) {
+        console.error(err);
+        setSaveStatus("Save failed");
+        setAuthStatus(err.message || "Save failed", true);
+      } finally {
+        saveInFlight = false;
+        if (saveQueued) {
+          saveQueued = false;
+          saveProgressToServer();
+        }
+      }
+    }
+
+    function queueAutoSave() {
+      if (isApplyingRemoteData || !authToken) return;
+      clearTimeout(autoSaveTimer);
+      autoSaveTimer = setTimeout(() => {
+        if (saveInFlight) {
+          saveQueued = true;
+          return;
+        }
+        saveProgressToServer();
+      }, 900);
+    }
+
+    async function flushPendingSaveBeforeLogout() {
+      clearTimeout(autoSaveTimer);
+      autoSaveTimer = null;
+
+      if (!authToken || isApplyingRemoteData) return;
+      if (saveInFlight) {
+        saveQueued = true;
+        while (saveInFlight) {
+          await wait(80);
+        }
+      }
+      await saveProgressToServer();
+      while (saveInFlight) {
+        await wait(80);
+      }
+    }
+
+    async function logoutUser() {
+      try {
+        await flushPendingSaveBeforeLogout();
+      } catch (err) {
+        console.error(err);
+      }
+
+      try {
+        if (authToken) {
+          await apiFetch("/api/logout", { method: "POST", body: "{}" });
+        }
+      } catch (err) {
+        console.error(err);
+      }
+
+      const prefill = authUsername || "";
+      clearSessionLocally();
+      setSaveStatus("Not saved yet");
+      openAuthOverlay(prefill);
+    }
+
+    function updateProgress() {
       const p = (maxPageVisited / totalPages) * 100;
       document.getElementById("progress").style.width = p + "%";
       document.getElementById("progressText").innerText = p.toFixed(0) + "% completed";
     }
 
-    function validateCurrentPage(){
-      if(currentPage===3){
-        let cnt=0;
-        for(let i=1;i<=5;i++){
-          const inp=document.getElementById("page3_input"+i);
-          if(inp && inp.value.trim()!=="") cnt++;
+    function showPage(p) {
+      currentPage = p;
+      if (currentPage > maxPageVisited) maxPageVisited = currentPage;
+      for (let i = 1; i <= totalPages; i++) {
+        const pg = document.getElementById("page" + i);
+        if (pg) pg.classList.remove("active");
+      }
+      const np = document.getElementById("page" + p);
+      if (np) np.classList.add("active");
+      document.getElementById("prev-btn").style.display = p === 1 ? "none" : "inline-block";
+      document.getElementById("next-btn").style.display = p === totalPages ? "none" : "inline-block";
+      updateProgress();
+    }
+
+    function wait(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function runCanvasTransition(action) {
+      const overlay = document.getElementById("pageTransitionOverlay");
+      overlay.style.pointerEvents = "auto";
+      overlay.style.opacity = "1";
+      await wait(280);
+      action();
+      await wait(60);
+      overlay.style.opacity = "0";
+      await wait(280);
+      overlay.style.pointerEvents = "none";
+    }
+
+    function validateCurrentPage() {
+      const wrong = "🙁Chef Mario is unhappy. Let’s make it correct.";
+      if (currentPage === 3) {
+        let cnt = 0;
+        for (let i = 1; i <= 5; i++) {
+          const inp = document.getElementById("page3_input" + i);
+          if (inp && inp.value.trim() !== "") cnt++;
         }
-        if(cnt<3){ alert("🙁Chef Mario is unhappy. Let’s make it correct."); return false; }
+        if (cnt < 3) { showMessagePopup(wrong); return false; }
       }
-      if(currentPage===7){
-        const i6=document.getElementById("page7_input6"), i7=document.getElementById("page7_input7");
-        if(i6 && !i6.value.includes("25")){ alert("🙁Chef Mario is unhappy. Let’s make it correct."); return false; }
-        if(i7 && !i7.value.includes("3.14")){ alert("🙁Chef Mario is unhappy. Let’s make it correct."); return false; }
+      if (currentPage === 7) {
+        const i6 = document.getElementById("page7_input6"), i7 = document.getElementById("page7_input7");
+        if (i6 && !i6.value.includes("25")) { showMessagePopup(wrong); return false; }
+        if (i7 && !i7.value.includes("3.14")) { showMessagePopup(wrong); return false; }
       }
-      if(currentPage===8){
-        const i2=document.getElementById("page8_input2"), i3=document.getElementById("page8_input3");
-        if(i2 && !i2.value.includes("21")){ alert("🙁Chef Mario is unhappy. Let’s make it correct."); return false; }
-        if(i3 && !i3.value.includes("15")){ alert("🙁Chef Mario is unhappy. Let’s make it correct."); return false; }
+      if (currentPage === 8) {
+        const i2 = document.getElementById("page8_input2"), i3 = document.getElementById("page8_input3");
+        if (i2 && !i2.value.includes("21")) { showMessagePopup(wrong); return false; }
+        if (i3 && !i3.value.includes("15")) { showMessagePopup(wrong); return false; }
       }
-      if(currentPage===10){
-        const i1=document.getElementById("page10_input1"), i2=document.getElementById("page10_input2");
-        if(i1 && !i1.value.includes("81")){ alert("🙁Chef Mario is unhappy. Let’s make it correct."); return false; }
-        if(i2 && !i2.value.includes("50")){ alert("🙁Chef Mario is unhappy. Let’s make it correct."); return false; }
+      if (currentPage === 10) {
+        const i1 = document.getElementById("page10_input1"), i2 = document.getElementById("page10_input2");
+        if (i1 && !i1.value.includes("81")) { showMessagePopup(wrong); return false; }
+        if (i2 && !i2.value.includes("50")) { showMessagePopup(wrong); return false; }
       }
-      if(currentPage===11){
-        const i7=document.getElementById("page11_input7"),
-              i8=document.getElementById("page11_input8"),
-              i10=document.getElementById("page11_input10");
-        if(i7 && !i7.value.includes("254")){ alert("🙁Chef Mario is unhappy. Let’s make it correct."); return false; }
-        if(i8 && !i8.value.includes("81")){ alert("🙁Chef Mario is unhappy. Let’s make it correct."); return false; }
-        if(i10 && !i10.value.includes("3.14")){ alert("🙁Chef Mario is unhappy. Let’s make it correct."); return false; }
+      if (currentPage === 11) {
+        const i7 = document.getElementById("page11_input7"),
+              i8 = document.getElementById("page11_input8"),
+              i10 = document.getElementById("page11_input10");
+        if (i7 && !i7.value.includes("254")) { showMessagePopup(wrong); return false; }
+        if (i8 && !i8.value.includes("81")) { showMessagePopup(wrong); return false; }
+        if (i10 && !i10.value.includes("3.14")) { showMessagePopup(wrong); return false; }
       }
-      if(currentPage===12){
-        const i1=document.getElementById("page12_input1"), i3=document.getElementById("page12_input3");
-        if(i1 && !i1.value.includes("18")){ alert("🙁Chef Mario is unhappy. Let’s make it correct."); return false; }
-        if(i3 && !i3.value.includes("38")){ alert("🙁Chef Mario is unhappy. Let’s make it correct."); return false; }
+      if (currentPage === 12) {
+        const i1 = document.getElementById("page12_input1"), i3 = document.getElementById("page12_input3");
+        if (i1 && !i1.value.includes("18")) { showMessagePopup(wrong); return false; }
+        if (i3 && !i3.value.includes("38")) { showMessagePopup(wrong); return false; }
       }
-      if(currentPage===15){
-        const inp=document.getElementById("page15_input1");
-        if(inp && !inp.value.includes("314")){ alert("🙁Chef Mario is unhappy. Let’s make it correct."); return false; }
+      if (currentPage === 15) {
+        const inp = document.getElementById("page15_input1");
+        if (inp && !inp.value.includes("314")) { showMessagePopup(wrong); return false; }
       }
-      if(currentPage===16){
-        const i2=document.getElementById("page16_input2"), i3=document.getElementById("page16_input3");
-        if(i2 && !i2.value.includes("23")){ alert("🙁Chef Mario is unhappy. Let’s make it correct."); return false; }
-        if(i3 && !i3.value.includes("45")){ alert("🙁Chef Mario is unhappy. Let’s make it correct."); return false; }
+      if (currentPage === 16) {
+        const i2 = document.getElementById("page16_input2"), i3 = document.getElementById("page16_input3");
+        if (i2 && !i2.value.includes("23")) { showMessagePopup(wrong); return false; }
+        if (i3 && !i3.value.includes("45")) { showMessagePopup(wrong); return false; }
       }
-      if(currentPage===17){
-        const i2=document.getElementById("page17_input2"), i3=document.getElementById("page17_input3");
-        if(i2 && !i2.value.includes("28")){ alert("🙁Chef Mario is unhappy. Let’s make it correct."); return false; }
-        if(i3 && !i3.value.includes("63")){ alert("🙁Chef Mario is unhappy. Let’s make it correct."); return false; }
+      if (currentPage === 17) {
+        const i2 = document.getElementById("page17_input2"), i3 = document.getElementById("page17_input3");
+        if (i2 && !i2.value.includes("28")) { showMessagePopup(wrong); return false; }
+        if (i3 && !i3.value.includes("63")) { showMessagePopup(wrong); return false; }
       }
-      if(currentPage===18){
-        const i2=document.getElementById("page18_input2"), i3=document.getElementById("page18_input3");
-        if(i2 && !i2.value.includes("12")){ alert("🙁Chef Mario is unhappy. Let’s make it correct."); return false; }
-        if(i3 && !i3.value.includes("12")){ alert("🙁Chef Mario is unhappy. Let’s make it correct."); return false; }
+      if (currentPage === 18) {
+        const i2 = document.getElementById("page18_input2"), i3 = document.getElementById("page18_input3");
+        if (i2 && !i2.value.includes("12")) { showMessagePopup(wrong); return false; }
+        if (i3 && !i3.value.includes("12")) { showMessagePopup(wrong); return false; }
       }
-      if(currentPage===19){
-        const i2=document.getElementById("page19_input2"), i3=document.getElementById("page19_input3");
-        if(i2 && !i2.value.includes("18")){ alert("🙁Chef Mario is unhappy. Let’s make it correct."); return false; }
-        if(i3 && !i3.value.includes("28")){ alert("🙁Chef Mario is unhappy. Let’s make it correct."); return false; }
+      if (currentPage === 19) {
+        const i2 = document.getElementById("page19_input2"), i3 = document.getElementById("page19_input3");
+        if (i2 && !i2.value.includes("18")) { showMessagePopup(wrong); return false; }
+        if (i3 && !i3.value.includes("28")) { showMessagePopup(wrong); return false; }
       }
-      if(currentPage===20){
-        const i3=document.getElementById("page20_input3");
-        if(i3 && !i3.value.includes("7")){ alert("🙁Chef Mario is unhappy. Let’s make it correct."); return false; }
+      if (currentPage === 20) {
+        const i3 = document.getElementById("page20_input3");
+        if (i3 && !i3.value.includes("7")) { showMessagePopup(wrong); return false; }
       }
-      if(currentPage===21){
-        const i3=document.getElementById("page21_input3");
-        if(i3 && !i3.value.includes("490")){ alert("🙁Chef Mario is unhappy. Let’s make it correct."); return false; }
+      if (currentPage === 21) {
+        const i3 = document.getElementById("page21_input3");
+        if (i3 && !i3.value.includes("490")) { showMessagePopup(wrong); return false; }
       }
       return true;
     }
 
-    function unlockPage23(){
-      const inp=document.getElementById("page23_input1");
-      if(!inp) return;
-      if(inp.value==="78.5ma"){
-        window.open("https://daryeaye.github.io/geotopia/adebayue.pdf","_blank");
-        inp.value="";
-        nextPage();
-      }else if(inp.value==="78.5"){
-        alert("✅Yes! Ask the merchant to open it!");
-      }else{
-        alert("🙁Chef Mario is unhappy. Let’s make it correct.");
-      }
-    }
-
-    function showPage(p){
-      for(let i=1;i<=totalPages;i++){
-        const pg=document.getElementById("page"+i);
-        if(pg) pg.classList.remove("active");
-      }
-      const np=document.getElementById("page"+p);
-      if(np) np.classList.add("active");
-
-      document.getElementById("prev-btn").style.display = p===1 ? "none" : "inline-block";
-      document.getElementById("next-btn").style.display = p===totalPages ? "none" : "inline-block";
-
-      updateProgress();
-    }
-
-    function nextPage(){
-      if(currentPage===9){
-        document.getElementById("page9_modal").style.display="block";
+    async function nextPage() {
+      if (currentPage === 9) {
+        document.getElementById("page9_modal").style.display = "block";
         return;
       }
-      if(!validateCurrentPage()) return;
+      if (!validateCurrentPage()) return;
 
-      if(currentPage < totalPages){
-        currentPage++;
-        if(currentPage > maxPageVisited) maxPageVisited = currentPage;
-        showPage(currentPage);
+      if (currentPage < totalPages) {
+        await runCanvasTransition(() => {
+          currentPage++;
+          if (currentPage > maxPageVisited) maxPageVisited = currentPage;
+          showPage(currentPage);
+        });
+        queueAutoSave();
       }
     }
 
-    function prevPage(){
-      if(currentPage>1){
+    function prevPage() {
+      document.getElementById("page9_modal").style.display = "none";
+      if (currentPage > 1) {
         currentPage--;
         showPage(currentPage);
+        queueAutoSave();
       }
     }
 
-    function confirmName(){
-      const ni=document.getElementById("username"), name=ni.value.trim();
-      if(name!==""){
-        localStorage.setItem("username",name);
-        ni.disabled=true;
-        alert("Name confirmed as: "+name);
-      }else{
-        alert("Please enter a name.");
+    async function unlockPage23() {
+      const inp = document.getElementById("page23_input1");
+      if (!inp) return;
+      const v = inp.value.trim().toLowerCase();
+
+      if (v === "78.5ma") {
+        inp.value = "";
+        queueAutoSave();
+        window.open("https://daryeaye.github.io/geotopia/adebayue.pdf", "_blank");
+        await nextPage();
+      } else if (v === "78.5") {
+        showMessagePopup("✅Yes! Ask the merchant to open it!");
+      } else {
+        showMessagePopup("🙁Chef Mario is unhappy. Let’s make it correct.");
       }
     }
 
-    function openIntro(){
-    window.open("https://www.youtube.com/watch?v=PFy9wgmUADc", "_blank");
+    function finishPage9() {
+      document.getElementById("page9_modal").style.display = "none";
+      if (!validateCurrentPage()) return;
+      if (currentPage < totalPages) {
+        runCanvasTransition(() => {
+          currentPage++;
+          if (currentPage > maxPageVisited) maxPageVisited = currentPage;
+          showPage(currentPage);
+        });
+        queueAutoSave();
+      }
+    }
+    function cancelPage9() {
+      document.getElementById("page9_modal").style.display = "none";
     }
 
-    function setupPersistence(){
-      const n=localStorage.getItem("username"), ni=document.getElementById("username");
-      if(n!==null && n!==""){ ni.value=n; ni.disabled=true; }
-
-      document.querySelectorAll("input[type='text']").forEach(el=>{
-        const key=el.id, st=localStorage.getItem(key);
-        if(st!==null){ el.value=st; }
-        el.addEventListener("input",()=>{ localStorage.setItem(key, el.value); });
+    function initCloudSaveInputs() {
+      document.querySelectorAll("input.typeable").forEach(el => {
+        el.addEventListener("input", queueAutoSave);
       });
     }
 
-    function setupDrawing(canvasId, resetButtonId, storageKey){
-      const canvas=document.getElementById(canvasId), ctx=canvas.getContext("2d");
-      let drawing=false, startX=0, startY=0, lines=[];
-      const stored=localStorage.getItem(storageKey);
-      if(stored){
-        try{ lines=JSON.parse(stored); redraw(); }catch(e){ lines=[]; }
-      }
+    function initDrawingCanvas(canvasId, resetButtonId, storageKey) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      let drawing = false;
+      let startX = 0, startY = 0;
 
-      function redraw(){
+      function redraw() {
         ctx.clearRect(0,0,canvas.width,canvas.height);
-        lines.forEach(l=>{
+        (drawingData[storageKey] || []).forEach(l => {
           ctx.beginPath();
-          ctx.moveTo(l.startX,l.startY);
-          ctx.lineTo(l.endX,l.endY);
-          ctx.strokeStyle="red";
-          ctx.lineWidth=2;
+          ctx.moveTo(l.startX, l.startY);
+          ctx.lineTo(l.endX, l.endY);
+          ctx.strokeStyle = "red";
+          ctx.lineWidth = 2;
           ctx.stroke();
         });
       }
 
-      canvas.addEventListener("mousedown",function(e){
-        if(lines.length>=3) return;
-        drawing=true;
-        const r=canvas.getBoundingClientRect();
-        startX=e.clientX-r.left;
-        startY=e.clientY-r.top;
+      canvas._redraw = redraw;
+
+      canvas.addEventListener("mousedown", function(e) {
+        if ((drawingData[storageKey] || []).length >= 3) return;
+        drawing = true;
+        const r = canvas.getBoundingClientRect();
+        startX = e.clientX - r.left;
+        startY = e.clientY - r.top;
       });
 
-      canvas.addEventListener("mousemove",function(e){
-        if(!drawing) return;
-        const r=canvas.getBoundingClientRect(), curX=e.clientX-r.left, curY=e.clientY-r.top;
+      canvas.addEventListener("mousemove", function(e) {
+        if (!drawing) return;
+        const r = canvas.getBoundingClientRect();
+        const curX = e.clientX - r.left;
+        const curY = e.clientY - r.top;
         redraw();
         ctx.beginPath();
-        ctx.moveTo(startX,startY);
-        ctx.lineTo(curX,curY);
-        ctx.strokeStyle="red";
-        ctx.lineWidth=2;
+        ctx.moveTo(startX, startY);
+        ctx.lineTo(curX, curY);
+        ctx.strokeStyle = "red";
+        ctx.lineWidth = 2;
         ctx.stroke();
       });
 
-      canvas.addEventListener("mouseup",function(e){
-        if(!drawing) return;
-        drawing=false;
-        const r=canvas.getBoundingClientRect(), endX=e.clientX-r.left, endY=e.clientY-r.top;
-        lines.push({startX,startY,endX,endY});
-        localStorage.setItem(storageKey, JSON.stringify(lines));
+      function finishLine(e) {
+        if (!drawing) return;
+        drawing = false;
+        const r = canvas.getBoundingClientRect();
+        const endX = e.clientX - r.left;
+        const endY = e.clientY - r.top;
+        drawingData[storageKey].push({ startX, startY, endX, endY });
         redraw();
-      });
+        queueAutoSave();
+      }
 
-      canvas.addEventListener("mouseleave",function(e){
-        if(drawing){
-          drawing=false;
-          const r=canvas.getBoundingClientRect(), endX=e.clientX-r.left, endY=e.clientY-r.top;
-          lines.push({startX,startY,endX,endY});
-          localStorage.setItem(storageKey, JSON.stringify(lines));
+      canvas.addEventListener("mouseup", finishLine);
+      canvas.addEventListener("mouseleave", finishLine);
+
+      const btn = document.getElementById(resetButtonId);
+      if (btn) {
+        btn.addEventListener("click", function() {
+          drawingData[storageKey] = [];
           redraw();
-        }
-      });
-
-      document.getElementById(resetButtonId).addEventListener("click",function(){
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-        lines=[];
-        localStorage.removeItem(storageKey);
-      });
-    }
-
-    function setupDraggable(id){
-      const b=document.getElementById(id);
-      let offX, offY;
-
-      b.addEventListener("mousedown",function(e){
-        offX=e.clientX-b.offsetLeft;
-        offY=e.clientY-b.offsetTop;
-
-        function mH(e){
-          b.style.left=(e.clientX-offX)+"px";
-          b.style.top=(e.clientY-offY)+"px";
-        }
-        function uH(){
-          document.removeEventListener("mousemove",mH);
-          document.removeEventListener("mouseup",uH);
-          localStorage.setItem(id, JSON.stringify({left:b.style.left, top:b.style.top}));
-        }
-
-        document.addEventListener("mousemove",mH);
-        document.addEventListener("mouseup",uH);
-      });
-
-      const s=localStorage.getItem(id);
-      if(s){
-        const pos=JSON.parse(s);
-        b.style.left=pos.left;
-        b.style.top=pos.top;
+          queueAutoSave();
+        });
       }
     }
 
-    function finishPage9(){
-      document.getElementById("page9_modal").style.display="none";
-      if(!validateCurrentPage()) return;
-      currentPage++;
-      if(currentPage>maxPageVisited) maxPageVisited=currentPage;
-      showPage(currentPage);
-    }
-    function cancelPage9(){
-      document.getElementById("page9_modal").style.display="none";
-    }
-
-    document.addEventListener("DOMContentLoaded",function(){
-      showPage(currentPage);
-      setupPersistence();
-      setupDrawing("canvas4","reset4","canvas4_lines");
-      setupDrawing("canvas5","reset5","canvas5_lines");
-      for(let i=1;i<=7;i++){ setupDraggable("page13_box"+i); }
-    });
-
-    // Translation widget screenshot selection
-    document.getElementById("select-text").addEventListener("click",function(){
-      const o=document.createElement("div");
-      o.id="selection-overlay";
-      document.body.appendChild(o);
-
-      let sX,sY,sB;
-      o.addEventListener("mousedown",function(e){
-        sX=e.clientX; sY=e.clientY;
-        sB=document.createElement("div");
-        sB.id="selection-box";
-        sB.style.left=sX+"px";
-        sB.style.top=sY+"px";
-        sB.style.width="0px";
-        sB.style.height="0px";
-        o.appendChild(sB);
-
-        function mH(e){
-          const cX=e.clientX,cY=e.clientY,
-                l=Math.min(sX,cX),t=Math.min(sY,cY),
-                w=Math.abs(cX-sX),h=Math.abs(cY-sY);
-          sB.style.left=l+"px";
-          sB.style.top=t+"px";
-          sB.style.width=w+"px";
-          sB.style.height=h+"px";
+    function redrawAllDrawingCanvases() {
+      ["canvas4", "canvas5"].forEach(id => {
+        const canvas = document.getElementById(id);
+        if (canvas && typeof canvas._redraw === "function") {
+          canvas._redraw();
         }
-
-        function uH(e){
-          o.removeEventListener("mousemove",mH);
-          o.removeEventListener("mouseup",uH);
-
-          const r=sB.getBoundingClientRect();
-          document.body.removeChild(o);
-
-          const T=document.getElementById("container"),TR=T.getBoundingClientRect();
-          html2canvas(T,{useCORS:true,allowTaint:false}).then(canvas=>{
-            const sf=canvas.width/TR.width,
-                  sx=(r.left-TR.left)*sf,
-                  sy=(r.top-TR.top)*sf,
-                  sw=r.width*sf,
-                  sh=r.height*sf,
-                  cc=document.createElement("canvas");
-            cc.width=sw; cc.height=sh;
-            const ctx=cc.getContext("2d");
-            ctx.drawImage(canvas,sx,sy,sw,sh,0,0,sw,sh);
-            cc.toBlob(blob=>{
-              if(blob){
-                const itm=new ClipboardItem({"image/png":blob});
-                navigator.clipboard.write([itm]).then(()=>{
-                  alert("Screenshot copied to clipboard.");
-                }).catch(err=>{
-                  console.error("Failed to copy screenshot to clipboard",err);
-                  alert("Failed to copy screenshot to clipboard.");
-                });
-              }
-            });
-          });
-        }
-
-        o.addEventListener("mousemove",mH);
-        o.addEventListener("mouseup",uH);
       });
+    }
+
+    function initDraggable(id) {
+      const b = document.getElementById(id);
+      if (!b) return;
+
+      const style = window.getComputedStyle(b);
+      draggableDefaults[id] = {
+        left: parseFloat(style.left) || 0,
+        top: parseFloat(style.top) || 0
+      };
+
+      b.addEventListener("mousedown", function(e) {
+        const offsetX = e.clientX - b.offsetLeft;
+        const offsetY = e.clientY - b.offsetTop;
+
+        function moveHandler(e) {
+          b.style.left = (e.clientX - offsetX) + "px";
+          b.style.top = (e.clientY - offsetY) + "px";
+        }
+
+        function upHandler() {
+          document.removeEventListener("mousemove", moveHandler);
+          document.removeEventListener("mouseup", upHandler);
+          draggablePositions[id] = {
+            left: parseFloat(b.style.left) || 0,
+            top: parseFloat(b.style.top) || 0
+          };
+          queueAutoSave();
+        }
+
+        document.addEventListener("mousemove", moveHandler);
+        document.addEventListener("mouseup", upHandler);
+      });
+    }
+
+    function initPdfJs() {
+      pdfjsLib.GlobalWorkerOptions.workerSrc =
+        "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+    }
+
+    function resetSecondCanvasToRoleStage() {
+      const roleStage = document.getElementById("role-stage");
+      const pdfView = document.getElementById("pdf-view");
+      const pdfScroll = document.getElementById("pdf-scroll");
+      const pdfStatus = document.getElementById("pdfStatus");
+      document.getElementById("role-container").classList.remove("pdf-mode");
+      roleStage.style.display = "block";
+      pdfView.style.display = "none";
+      pdfScroll.innerHTML = "";
+      pdfScroll.scrollTop = 0;
+      pdfStatus.style.display = "none";
+      currentPdfUrl = "";
+      pdfScrollTop = 0;
+    }
+
+    async function renderPdfIntoSecondCanvas(url, preserveScroll = false) {
+      const roleContainer = document.getElementById("role-container");
+      const roleStage = document.getElementById("role-stage");
+      const pdfView = document.getElementById("pdf-view");
+      const pdfScroll = document.getElementById("pdf-scroll");
+      const pdfStatus = document.getElementById("pdfStatus");
+
+      currentPdfUrl = url || "";
+      if (!preserveScroll) pdfScrollTop = 0;
+
+      roleContainer.classList.add("pdf-mode");
+      roleStage.style.display = "none";
+      pdfView.style.display = "block";
+      pdfScroll.innerHTML = "";
+      pdfScroll.scrollTop = 0;
+      pdfStatus.style.display = "block";
+      pdfStatus.textContent = "Loading PDF...";
+
+      try {
+        const loadingTask = pdfjsLib.getDocument({ url });
+        const pdf = await loadingTask.promise;
+        pdfStatus.textContent = "Rendering pages...";
+
+        const targetWidth = 920;
+        for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+          const page = await pdf.getPage(pageNum);
+          const viewport1 = page.getViewport({ scale: 1 });
+          const scale = targetWidth / viewport1.width;
+          const viewport = page.getViewport({ scale });
+
+          const canvas = document.createElement("canvas");
+          canvas.width = Math.floor(viewport.width);
+          canvas.height = Math.floor(viewport.height);
+
+          const ctx = canvas.getContext("2d", { alpha: false });
+          pdfScroll.appendChild(canvas);
+          await page.render({ canvasContext: ctx, viewport }).promise;
+        }
+
+        pdfStatus.style.display = "none";
+        pdfScroll.scrollTop = preserveScroll ? pdfScrollTop : 0;
+        queueAutoSave();
+      } catch (err) {
+        console.error(err);
+        pdfStatus.style.display = "none";
+        showMessagePopup("PDF failed to load in the canvas. Check Console for details.");
+        resetSecondCanvasToRoleStage();
+      }
+    }
+
+    function initSecondCanvasHotspots() {
+      document.getElementById("hotspot-officer").addEventListener("click", () => renderPdfIntoSecondCanvas(ROLE_PDFS.officer));
+      document.getElementById("hotspot-professor").addEventListener("click", () => renderPdfIntoSecondCanvas(ROLE_PDFS.professor));
+      document.getElementById("hotspot-hacker").addEventListener("click", () => renderPdfIntoSecondCanvas(ROLE_PDFS.hacker));
+      document.getElementById("hotspot-video").addEventListener("click", () => {
+        window.open("https://www.youtube.com/watch?v=Fj98o3aFfk8", "_blank");
+      });
+      document.getElementById("pdf-scroll").addEventListener("scroll", function(e) {
+        pdfScrollTop = e.target.scrollTop;
+        queueAutoSave();
+      });
+    }
+
+    function initOpenFileButton() {
+      document.getElementById("openFileBtn").addEventListener("click", function() {
+        if (!currentPdfUrl) {
+          showMessagePopup("Pick a role file first.");
+          return;
+        }
+        window.open(currentPdfUrl, "_blank");
+      });
+    }
+
+    function initTranslatorWidget() {
+      const widget = document.getElementById("side-widget");
+      const collapseBtn = document.getElementById("collapse-widget");
+
+      collapseBtn.addEventListener("click", function(e) {
+        e.stopPropagation();
+        widget.classList.add("collapsed");
+      });
+
+      widget.addEventListener("click", function() {
+        if (widget.classList.contains("collapsed")) {
+          widget.classList.remove("collapsed");
+        }
+      });
+    }
+
+    function initTranslationScreenshotTool() {
+      document.getElementById("select-text").addEventListener("click", function() {
+        const overlay = document.createElement("div");
+        overlay.id = "selection-overlay";
+        document.body.appendChild(overlay);
+
+        let startX, startY, selectionBox;
+
+        overlay.addEventListener("mousedown", function(e) {
+          startX = e.clientX;
+          startY = e.clientY;
+
+          selectionBox = document.createElement("div");
+          selectionBox.id = "selection-box";
+          selectionBox.style.left = startX + "px";
+          selectionBox.style.top = startY + "px";
+          selectionBox.style.width = "0px";
+          selectionBox.style.height = "0px";
+          overlay.appendChild(selectionBox);
+
+          function mouseMoveHandler(e) {
+            const currentX = e.clientX;
+            const currentY = e.clientY;
+            const rectLeft = Math.min(startX, currentX);
+            const rectTop = Math.min(startY, currentY);
+            const rectWidth = Math.abs(currentX - startX);
+            const rectHeight = Math.abs(currentY - startY);
+
+            selectionBox.style.left = rectLeft + "px";
+            selectionBox.style.top = rectTop + "px";
+            selectionBox.style.width = rectWidth + "px";
+            selectionBox.style.height = rectHeight + "px";
+          }
+
+          function mouseUpHandler() {
+            overlay.removeEventListener("mousemove", mouseMoveHandler);
+            overlay.removeEventListener("mouseup", mouseUpHandler);
+
+            const boxRect = selectionBox.getBoundingClientRect();
+            document.body.removeChild(overlay);
+
+            const target = document.getElementById("container");
+            const targetRect = target.getBoundingClientRect();
+
+            html2canvas(target, { useCORS: true, allowTaint: false }).then(canvas => {
+              const scaleFactor = canvas.width / targetRect.width;
+              const sx = (boxRect.left - targetRect.left) * scaleFactor;
+              const sy = (boxRect.top - targetRect.top) * scaleFactor;
+              const sWidth = boxRect.width * scaleFactor;
+              const sHeight = boxRect.height * scaleFactor;
+
+              const croppedCanvas = document.createElement("canvas");
+              croppedCanvas.width = sWidth;
+              croppedCanvas.height = sHeight;
+
+              const ctx = croppedCanvas.getContext("2d");
+              ctx.drawImage(canvas, sx, sy, sWidth, sHeight, 0, 0, sWidth, sHeight);
+
+              croppedCanvas.toBlob(blob => {
+                if (!blob) return;
+                const item = new ClipboardItem({ "image/png": blob });
+                navigator.clipboard.write([item]).then(() => {
+                  showMessagePopup("Screenshot copied to clipboard.");
+                }).catch(err => {
+                  console.error(err);
+                  showMessagePopup("Failed to copy screenshot to clipboard.");
+                });
+              });
+            });
+          }
+
+          overlay.addEventListener("mousemove", mouseMoveHandler);
+          overlay.addEventListener("mouseup", mouseUpHandler);
+        });
+      });
+    }
+
+    function showTutorial() {
+      const alreadySeen = localStorage.getItem(TUTORIAL_STORAGE_KEY);
+      if (alreadySeen === "yes") {
+        maybeRequireAuthOverlay();
+        return;
+      }
+
+      tutorialIndex = 0;
+      document.getElementById("tutorialImage").src = TUTORIAL_IMAGES[tutorialIndex];
+      document.getElementById("tutorialOverlay").style.display = "flex";
+    }
+
+    function nextTutorialSlide() {
+      tutorialIndex++;
+      if (tutorialIndex >= TUTORIAL_IMAGES.length) {
+        document.getElementById("tutorialOverlay").style.display = "none";
+        localStorage.setItem(TUTORIAL_STORAGE_KEY, "yes");
+        maybeRequireAuthOverlay();
+        return;
+      }
+      document.getElementById("tutorialImage").src = TUTORIAL_IMAGES[tutorialIndex];
+    }
+
+    function initTutorial() {
+      document.getElementById("tutorialNext").addEventListener("click", nextTutorialSlide);
+      TUTORIAL_IMAGES.forEach(url => {
+        const pre = new Image();
+        pre.src = url;
+      });
+      showTutorial();
+    }
+
+    document.addEventListener("DOMContentLoaded", async function() {
+      restoreSessionLocally();
+
+      initPdfJs();
+      showPage(currentPage);
+      initCloudSaveInputs();
+      initDrawingCanvas("canvas4", "reset4", "canvas4_lines");
+      initDrawingCanvas("canvas5", "reset5", "canvas5_lines");
+      for (let i = 1; i <= 7; i++) initDraggable("page13_box" + i);
+      initSecondCanvasHotspots();
+      initOpenFileButton();
+      initTranslatorWidget();
+      initTranslationScreenshotTool();
+
+      document.getElementById("introBtn").addEventListener("click", openIntro);
+      document.getElementById("authRegisterBtn").addEventListener("click", registerUser);
+      document.getElementById("authLoginBtn").addEventListener("click", loginUser);
+      document.getElementById("logoutBtn").addEventListener("click", logoutUser);
+      document.getElementById("prev-btn").addEventListener("click", prevPage);
+      document.getElementById("next-btn").addEventListener("click", nextPage);
+
+      document.getElementById("auth-password").addEventListener("keydown", function(e) {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          loginUser();
+        }
+      });
+
+      if (authToken) {
+        try {
+          await loadProgressFromServer();
+        } catch (err) {
+          console.error(err);
+          clearSessionLocally();
+          showPage(1);
+        }
+      }
+
+      initTutorial();
     });
   </script>
 
-  <!-- ©XDY. All rights reserved. This code is the intellectual property of XDY.
-       Unauthorized copying, reproduction, or redistribution is strictly prohibited.
-       For educational use only. Contact the author for permissions. -->
+  <!-- ©XDY. All rights reserved. This code is the intellectual property of XDY. Unauthorized copying, reproduction, or redistribution is strictly prohibited. For educational use only. Contact the author for permissions. -->
 </body>
 </html>
