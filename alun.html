@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Merchant's Quest 3</title>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet">
+
   <style>
     body, html {
       margin: 0;
@@ -15,11 +16,13 @@
       background: url('https://daryeaye.github.io/geotopia/thatsit2.png') no-repeat center center fixed;
       background-size: cover;
     }
+
     #app-container {
       display: flex;
       flex-direction: column;
       align-items: center;
     }
+
     /* Container for pages */
     #container {
       position: relative;
@@ -28,6 +31,7 @@
       border: 1px solid #ccc;
       overflow: hidden;
     }
+
     .page {
       position: absolute;
       top: 0;
@@ -36,21 +40,42 @@
       height: 540px;
       display: none;
     }
+
     .page.active {
       display: block;
     }
-    /* Background images for the two pages */
+
+    /* Background images for the pages */
     #page1 {
+      background: url("https://daryeaye.github.io/gt11/87.jpg") no-repeat center center;
+      background-size: cover;
+    }
+
+    #page2 {
       background: url("https://daryeaye.github.io/gt4/4-25.jpg") no-repeat center center;
       background-size: cover;
     }
-    #page2 {
+
+    #page3 {
       background: url("https://daryeaye.github.io/gt4/4-26.jpg") no-repeat center center;
       background-size: cover;
     }
+
+    .transparent-box {
+      position: absolute;
+      left: 84px;
+      top: 123px;
+      width: 229px;
+      height: 268px;
+      border: none;
+      background-color: transparent;
+      cursor: pointer;
+    }
+
     #nav-buttons {
       margin-top: 10px;
     }
+
     button {
       font-family: "Caveat", cursive;
       font-size: 20px;
@@ -65,7 +90,7 @@
     #side-widget {
       position: fixed;
       top: 20px;
-      right: 20px; /* Use left:20px if preferred */
+      right: 20px;
       width: 200px;
       height: 200px;
       background: #f9f9f9;
@@ -75,11 +100,13 @@
       font-family: 'Caveat', cursive;
       z-index: 999;
     }
+
     #side-widget p.title {
       font-size: 24px;
       text-align: center;
       margin: 0 0 10px;
     }
+
     #side-widget button,
     #side-widget a {
       display: block;
@@ -93,6 +120,7 @@
       text-decoration: none;
       color: inherit;
     }
+
     /* Selection overlay styles */
     #selection-overlay {
       position: fixed;
@@ -103,6 +131,7 @@
       cursor: crosshair;
       z-index: 1000;
     }
+
     #selection-box {
       position: absolute;
       border: 2px dashed red;
@@ -110,16 +139,30 @@
     }
   </style>
 </head>
+
 <body>
   <div id="app-container">
     <div id="container">
+
+      <!-- New Page 1 -->
       <div id="page1" class="page active">
+        <a href="https://daryeaye.github.io/gt11/87.png" target="_blank">
+          <div class="transparent-box"></div>
+        </a>
+      </div>
+
+      <!-- Original Page 1, now Page 2 -->
+      <div id="page2" class="page">
         <!-- Red boxes removed -->
       </div>
-      <div id="page2" class="page">
+
+      <!-- Original Page 2, now Page 3 -->
+      <div id="page3" class="page">
         <!-- Text box removed -->
       </div>
+
     </div>
+
     <div id="nav-buttons">
       <button id="prev-btn" onclick="prevPage()">Previous</button>
       <button id="next-btn" onclick="nextPage()">Next</button>
@@ -170,6 +213,7 @@
           const rectTop = Math.min(startY, currentY);
           const rectWidth = Math.abs(currentX - startX);
           const rectHeight = Math.abs(currentY - startY);
+
           selectionBox.style.left = rectLeft + 'px';
           selectionBox.style.top = rectTop + 'px';
           selectionBox.style.width = rectWidth + 'px';
@@ -183,7 +227,7 @@
           const boxRect = selectionBox.getBoundingClientRect();
           document.body.removeChild(overlay);
           
-          // Target the main container (modified from '#content' to '#container')
+          // Target the main container
           const target = document.getElementById('container');
           const targetRect = target.getBoundingClientRect();
           
@@ -199,6 +243,7 @@
             const croppedCanvas = document.createElement('canvas');
             croppedCanvas.width = sWidth;
             croppedCanvas.height = sHeight;
+
             const ctx = croppedCanvas.getContext('2d');
             ctx.drawImage(canvas, sx, sy, sWidth, sHeight, 0, 0, sWidth, sHeight);
             
@@ -225,13 +270,15 @@
   
   <script>
     let currentPage = 1;
-    const totalPages = 2;
+    const totalPages = 3;
     
     function showPage(pageNum) {
       for (let i = 1; i <= totalPages; i++) {
         document.getElementById('page' + i).classList.remove('active');
       }
+
       document.getElementById('page' + pageNum).classList.add('active');
+
       document.getElementById("prev-btn").style.display = pageNum === 1 ? "none" : "inline-block";
       document.getElementById("next-btn").style.display = pageNum === totalPages ? "none" : "inline-block";
     }
@@ -256,4 +303,3 @@
   </script>
 </body>
 </html>
-
